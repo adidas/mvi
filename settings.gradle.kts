@@ -1,1 +1,1 @@
-rootProject.name = "mvi-adidas"
+rootProject.name = "mvi"

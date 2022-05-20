@@ -37,4 +37,4 @@ jobs:
       - name: Gradle Build Action
         uses: gradle/gradle-build-action@v2.1.6
         with:
-          arguments: publish -Pversion=${GITHUB_REF#refs/tags/}
+          arguments: publish -Pversion=${{github.ref_name}} -Pusername=${{github.actor}} -Ppassword=${{github.token}} -PartifactoryUrl=${{secrets.ARTIFACTORY_URL}} -PartifactoryUsername=${{secrets.ARTIFACTORY_USERNAME}} -PartifactoryPassword=${{secrets.ARTIFACTORY_PASSWORD}}

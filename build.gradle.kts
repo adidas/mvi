@@ -6,8 +6,8 @@ plugins {
     `maven-publish`
 }
 
-group = "com.adidas.mvi"
-version = project.findProperty("version") ?: "DEBUG"
+group = "com.adidas"
+version = project.findProperty("version")?.toString()?.replace("v", "") ?: "DEBUG"
 
 kotlin {
     explicitApi()
@@ -30,6 +30,19 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
+lateinit var sourcesArtifact: PublishArtifact
+
+tasks {
+    val sourcesJar by creating(Jar::class) {
+        archiveClassifier.set("sources")
+        from(sourceSets["main"].allJava.srcDirs)
+    }
+
+    artifacts {
+        sourcesArtifact = archives(sourcesJar)
+    }
+}
+
 dependencies {
     implementation(libs.coroutines.core)
 
@@ -42,16 +55,17 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/adidas/mvi-android")
+            url = uri("https://maven.pkg.github.com/adidas/mvi")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                username = project.findProperty("username").toString()
+                password = project.findProperty("password").toString()
             }
         }
     }
     publications {
-        register<MavenPublication>("GitHubPackages") {
+        register<MavenPublication>("release") {
             from(components["kotlin"])
+            artifact(sourcesArtifact)
         }
     }
 }
