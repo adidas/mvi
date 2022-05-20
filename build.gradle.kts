@@ -3,10 +3,11 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     alias(libs.plugins.ktlint)
+    `maven-publish`
 }
 
 group = "com.adidas.mvi"
-version = "1.0.0"
+version = project.findProperty("version") ?: "DEBUG"
 
 kotlin {
     explicitApi()
@@ -35,4 +36,22 @@ dependencies {
     testImplementation(libs.kotest.runner)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/adidas/mvi-android")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("GitHubPackages") {
+            from(components["kotlin"])
+        }
+    }
 }
