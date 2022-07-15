@@ -1,9 +1,9 @@
 package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
-import com.adidas.mvi.IntentExecutor
 import com.adidas.mvi.Logger
 import com.adidas.mvi.Reducer
+import com.adidas.mvi.SimplifiedIntentExecutor
 import com.adidas.mvi.TerminatedIntentException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
@@ -20,7 +20,7 @@ internal class ReducerTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
-    val intentExecutor = mockk<IntentExecutor<TestIntent, TestTransform>>()
+    val intentExecutor = mockk<SimplifiedIntentExecutor<TestIntent, TestState>>()
     val logger = mockk<Logger>(relaxUnitFun = true)
 
     val coroutineListener = CoroutineListener()
@@ -66,14 +66,14 @@ internal class ReducerTests : BehaviorSpec({
 
             Then("This intent should be logged") {
                 verify(exactly = 1) { logger.logIntent(TestIntent.SimpleIntent) }
-                verify(exactly = 1) { intentExecutor.executeIntent(TestIntent.SimpleIntent, any()) }
+                verify(exactly = 1) { intentExecutor.invoke(TestIntent.SimpleIntent) }
             }
         }
     }
 
     Given("A reducer which triggers a TerminatedIntentException when executing a SimpleIntent") {
         val exceptionToThrow = TerminatedIntentException()
-        every { intentExecutor.executeIntent(TestIntent.SimpleIntent, any()) } throws exceptionToThrow
+        every { intentExecutor.invoke(TestIntent.SimpleIntent) } throws exceptionToThrow
         val reducer = createReducer()
 
         When("I execute an intent and it is cancelled throwing TerminatedIntentException") {
@@ -89,7 +89,7 @@ internal class ReducerTests : BehaviorSpec({
         val reducer = createReducer()
 
         val exceptionToThrow = Exception()
-        every { intentExecutor.executeIntent(TestIntent.SimpleIntent, any()) } throws exceptionToThrow
+        every { intentExecutor.invoke(TestIntent.SimpleIntent) } throws exceptionToThrow
 
         When("I execute an intent") {
             reducer.executeIntent(TestIntent.SimpleIntent)
@@ -104,9 +104,8 @@ internal class ReducerTests : BehaviorSpec({
         val reducer = createReducer()
 
         every {
-            intentExecutor.executeIntent(
+            intentExecutor.invoke(
                 TestIntent.Transform1Producer,
-                any()
             )
         } returns flowOf(TestTransform.Transform1)
 
@@ -130,9 +129,8 @@ internal class ReducerTests : BehaviorSpec({
         val reducer = createReducer()
 
         every {
-            intentExecutor.executeIntent(
-                TestIntent.FailedTransformProducer,
-                any()
+            intentExecutor.invoke(
+                TestIntent.FailedTransformProducer
             )
         } returns flowOf(TestTransform.FailedTransform)
 

@@ -1,7 +1,6 @@
 package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
-import com.adidas.mvi.JobTerminator
 import com.adidas.mvi.Logger
 import com.adidas.mvi.Reducer
 import io.mockk.mockk
@@ -31,8 +30,7 @@ internal class TestCancellationReducerWrapper(
     }
 
     private fun executeIntent(
-        intent: TestIntent,
-        jobTerminator: JobTerminator<TestIntent>
+        intent: TestIntent
     ): Flow<TestTransform> {
         return when (intent) {
             TestIntent.AbelIntent -> someTestFlow.map { TestTransform.AbelTransform }
