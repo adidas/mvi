@@ -3,11 +3,8 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     alias(libs.plugins.ktlint)
-    `maven-publish`
+    alias(libs.plugins.mavenPublish)
 }
-
-group = "com.adidas"
-version = project.findProperty("version")?.toString()?.replace("v", "") ?: "DEBUG"
 
 kotlin {
     explicitApi()
@@ -30,42 +27,10 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
-lateinit var sourcesArtifact: PublishArtifact
-
-tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allJava.srcDirs)
-    }
-
-    artifacts {
-        sourcesArtifact = archives(sourcesJar)
-    }
-}
-
 dependencies {
     implementation(libs.coroutines.core)
 
     testImplementation(libs.kotest.runner)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/adidas/mvi")
-            credentials {
-                username = project.findProperty("username").toString()
-                password = project.findProperty("password").toString()
-            }
-        }
-    }
-    publications {
-        register<MavenPublication>("release") {
-            from(components["kotlin"])
-            artifact(sourcesArtifact)
-        }
-    }
 }
