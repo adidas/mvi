@@ -43,7 +43,7 @@ dependencies {
     if (!versionFromTag.isNullOrEmpty()) {
         implementation("com.github.adidas:mvi:$versionFromTag")
     } else {
-        implementation(project(":"))
+        implementation(project(":mvi"))
     }
 
     testImplementation(libs.kotest.runner)
