@@ -1,9 +1,10 @@
 package com.adidas.mvi.declarative.transform
 
 import com.adidas.mvi.declarative.MviState
-import com.adidas.mvi.transform.Transform
+import com.adidas.mvi.transform.StateTransform
 
-public abstract class StateTransform<TState, TSideEffect> : Transform<MviState<TState, TSideEffect>> {
+public abstract class StateTransform<TState, TSideEffect> :
+    StateTransform<MviState<TState, TSideEffect>> {
 
     protected abstract fun mutate(currentState: TState): TState
 

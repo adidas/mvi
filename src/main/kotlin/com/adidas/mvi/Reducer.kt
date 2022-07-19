@@ -1,6 +1,6 @@
 package com.adidas.mvi
 
-import com.adidas.mvi.transform.Transform
+import com.adidas.mvi.transform.StateTransform
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 
-public typealias SimplifiedIntentExecutor<TIntent, TState> = (intent: TIntent) -> Flow<Transform<TState>>
+public typealias SimplifiedIntentExecutor<TIntent, TState> = (intent: TIntent) -> Flow<StateTransform<TState>>
 
 public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, this option will be deprecated in the future") constructor(
     private val coroutineScope: CoroutineScope,
@@ -38,7 +38,7 @@ public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, th
         intentExecutor(intent)
     })
 
-    private val _transforms = MutableSharedFlow<Transform<TState>>()
+    private val _transforms = MutableSharedFlow<StateTransform<TState>>()
     // TODO 2: use another (simpler) data structure once we remove jobTerminator dependency (1) - https://tools.adidas-group.com/jira/browse/HXC-819 [2]
     private val multimap = Multimap<TIntent, Job>()
 
@@ -84,7 +84,7 @@ public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, th
     public inline fun <reified T : TState> requireState(): T = state.value as T
 
     @Suppress("FunctionName")
-    private suspend fun reduce(previousState: TState, transform: Transform<TState>): TState {
+    private suspend fun reduce(previousState: TState, transform: StateTransform<TState>): TState {
         return try {
             transform.reduce(previousState, defaultDispatcher).also { newState ->
                 logger?.logTransformedNewState(transform, previousState, newState)
