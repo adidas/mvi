@@ -3,12 +3,8 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     alias(libs.plugins.ktlint)
-    `maven-publish`
+    alias(libs.plugins.mavenPublish)
 }
-
-group = "com.adidas"
-val versionFromTag = project.findProperty("version")?.takeIf { it != "unspecified" }?.toString()?.replace("v", "")
-version = versionFromTag ?: "DEBUG"
 
 kotlin {
     explicitApi()
@@ -40,30 +36,7 @@ tasks {
 }
 
 dependencies {
-    if (!versionFromTag.isNullOrEmpty()) {
-        implementation("com.github.adidas:mvi:$versionFromTag")
-    } else {
-        implementation(project(":mvi"))
-    }
+    implementation(project(":mvi"))
 
     testImplementation(libs.kotest.runner)
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/adidas/mvi")
-            credentials {
-                username = project.findProperty("username").toString()
-                password = project.findProperty("password").toString()
-            }
-        }
-    }
-    publications {
-        register<MavenPublication>("release") {
-            from(components["kotlin"])
-            artifact(sourcesArtifact)
-        }
-    }
 }
