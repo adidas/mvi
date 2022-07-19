@@ -1,6 +1,6 @@
 package com.adidas.mvi.declarative
 
 import com.adidas.mvi.State
-import com.adidas.mvi.actions.Actions
+import com.adidas.mvi.sideeffects.SideEffects
 
-public data class MviState<out TState, TAction>(val state: TState, val actions: Actions<TAction>) : State
+public data class MviState<out TState, TSideEffect>(val state: TState, val sideEffects: SideEffects<TSideEffect>) : State
