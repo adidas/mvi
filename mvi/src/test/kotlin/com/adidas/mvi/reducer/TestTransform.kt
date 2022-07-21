@@ -1,11 +1,11 @@
 package com.adidas.mvi.reducer
 
-import com.adidas.mvi.transform.Transform
+import com.adidas.mvi.transform.StateTransform
 
 internal const val IMPOSSIBLE_INTENT_ID = 1
 internal const val UNIQUE_INTENT_ID = 2
 
-internal sealed class TestTransform : Transform<TestState> {
+internal sealed class TestTransform : StateTransform<TestState> {
     object Transform1 : TestTransform() {
         override fun reduce(currentState: TestState): TestState {
             return TestState.StateFromTransform1
