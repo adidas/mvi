@@ -13,3 +13,4 @@ kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kote
 
 [plugins]
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "10.3.0" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.21.0" }

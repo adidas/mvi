@@ -10,9 +10,13 @@ kotlin {
     explicitApi()
 }
 
+val compileTestKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+}
+
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
 }
 
 configure<KtlintExtension> {
@@ -23,20 +27,10 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
-lateinit var sourcesArtifact: PublishArtifact
-tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allJava.srcDirs)
-    }
-
-    artifacts {
-        sourcesArtifact = archives(sourcesJar)
-    }
-}
-
 dependencies {
-    implementation(project(":mvi"))
+    implementation(libs.coroutines.core)
 
     testImplementation(libs.kotest.runner)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
 }
