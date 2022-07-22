@@ -1,14 +1,22 @@
 package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
-import com.adidas.mvi.Logger
 import com.adidas.mvi.Reducer
 import com.adidas.mvi.SimplifiedIntentExecutor
 import com.adidas.mvi.TerminatedIntentException
+import com.adidas.mvi.reducer.logger.SpyLogger
+import com.adidas.mvi.reducer.logger.shouldContainFailingIntent
+import com.adidas.mvi.reducer.logger.shouldContainFailingTransform
+import com.adidas.mvi.reducer.logger.shouldContainSuccessfulIntent
+import com.adidas.mvi.reducer.logger.shouldContainSuccessfulTransform
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.inspectors.shouldForAtLeastOne
+import io.kotest.inspectors.shouldForNone
+import io.kotest.inspectors.shouldForOne
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -21,7 +29,7 @@ internal class ReducerTests : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     val intentExecutor = mockk<SimplifiedIntentExecutor<TestIntent, TestState>>()
-    val logger = mockk<Logger>(relaxUnitFun = true)
+    val logger = SpyLogger()
 
     val coroutineListener = CoroutineListener()
     listeners(coroutineListener)
@@ -65,7 +73,9 @@ internal class ReducerTests : BehaviorSpec({
             reducer.executeIntent(TestIntent.SimpleIntent)
 
             Then("This intent should be logged") {
-                verify(exactly = 1) { logger.logIntent(TestIntent.SimpleIntent) }
+                logger.history.shouldForOne { log ->
+                    log shouldContainSuccessfulIntent TestIntent.SimpleIntent.toString()
+                }
                 verify(exactly = 1) { intentExecutor.invoke(TestIntent.SimpleIntent) }
             }
         }
@@ -80,7 +90,9 @@ internal class ReducerTests : BehaviorSpec({
             reducer.executeIntent(TestIntent.SimpleIntent)
 
             Then("The exception should NOT be logged") {
-                verify(exactly = 0) { logger.logFailedIntent(TestIntent.SimpleIntent, exceptionToThrow) }
+                logger.history.shouldForNone { log ->
+                    log shouldContain exceptionToThrow.toString()
+                }
             }
         }
     }
@@ -95,7 +107,9 @@ internal class ReducerTests : BehaviorSpec({
             reducer.executeIntent(TestIntent.SimpleIntent)
 
             Then("The exception should be logged") {
-                verify(exactly = 1) { logger.logFailedIntent(TestIntent.SimpleIntent, exceptionToThrow) }
+                logger.history.shouldForAtLeastOne { log ->
+                    log shouldContainFailingIntent exceptionToThrow.toString()
+                }
             }
         }
     }
@@ -114,12 +128,8 @@ internal class ReducerTests : BehaviorSpec({
 
             Then("The state should change to the state which Transform1 produces") {
                 reducer.state.value shouldBe TestState.StateFromTransform1
-                verify(exactly = 1) {
-                    logger.logTransformedNewState(
-                        transform = TestTransform.Transform1,
-                        previousState = TestState.InitialState,
-                        newState = TestState.StateFromTransform1
-                    )
+                logger.history.shouldForOne { log ->
+                    log shouldContainSuccessfulTransform TestState.StateFromTransform1.toString()
                 }
             }
         }
@@ -142,12 +152,8 @@ internal class ReducerTests : BehaviorSpec({
             }
 
             Then("The failure should be logged") {
-                verify(exactly = 1) {
-                    logger.logFailedTransformNewState(
-                        TestTransform.FailedTransform,
-                        TestState.InitialState,
-                        ofType<Exception>()
-                    )
+                logger.history.shouldForOne { log ->
+                    log shouldContainFailingTransform TestTransform.FailedTransform.toString()
                 }
             }
         }
