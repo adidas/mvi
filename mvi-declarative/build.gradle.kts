@@ -10,6 +10,11 @@ kotlin {
     explicitApi()
 }
 
+val compileTestKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+}
+
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
@@ -36,7 +41,7 @@ tasks {
 }
 
 dependencies {
-    implementation(project(":mvi"))
-
+    api(project(":mvi"))
+    implementation(libs.coroutines.core)
     testImplementation(libs.kotest.runner)
 }
