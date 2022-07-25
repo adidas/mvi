@@ -36,7 +36,7 @@ tasks {
 }
 
 dependencies {
-    implementation(project(":mvi"))
+    api(project(":mvi"))
 
     testImplementation(libs.kotest.runner)
 }
