@@ -27,29 +27,6 @@ internal class ReducerTests : BehaviorSpec({
     val coroutineListener = CoroutineListener()
     listeners(coroutineListener)
 
-
-    fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<TestState>> =
-            {
-                executedIntents.add(it)
-                flowOf(TestTransform.Transform1)
-            }
-
-    fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<TestState>> =
-            {
-                if (it is TestIntent.SimpleIntent) throw exception
-                emptyFlow()
-            }
-
-    fun createIntentExecutorContainer(intent: TestIntent = TestIntent.FailedTransformProducer, transform: TestTransform): (TestIntent) -> Flow<StateTransform<TestState>> =
-            {
-                when (it) {
-                    intent -> {
-                        flowOf(transform)
-                    }
-                    else -> emptyFlow()
-                }
-            }
-
     fun createReducer(executor: (intent: TestIntent) -> Flow<StateTransform<TestState>> = createIntentExecutorContainer(transform = TestTransform.Transform1)) = Reducer(
             coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
             initialState = TestState.InitialState,
@@ -194,3 +171,25 @@ internal class ReducerTests : BehaviorSpec({
         }
     }
 })
+
+private fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<TestState>> =
+        {
+            executedIntents.add(it)
+            flowOf(TestTransform.Transform1)
+        }
+
+private fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<TestState>> =
+        {
+            if (it is TestIntent.SimpleIntent) throw exception
+            emptyFlow()
+        }
+
+private fun createIntentExecutorContainer(intent: TestIntent = TestIntent.FailedTransformProducer, transform: TestTransform): (TestIntent) -> Flow<StateTransform<TestState>> =
+        {
+            when (it) {
+                intent -> {
+                    flowOf(transform)
+                }
+                else -> emptyFlow()
+            }
+        }
