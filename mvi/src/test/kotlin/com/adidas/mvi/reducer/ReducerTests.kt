@@ -3,7 +3,11 @@ package com.adidas.mvi.reducer
 import com.adidas.mvi.CoroutineListener
 import com.adidas.mvi.Reducer
 import com.adidas.mvi.TerminatedIntentException
-import com.adidas.mvi.reducer.logger.*
+import com.adidas.mvi.reducer.logger.SpyLogger
+import com.adidas.mvi.reducer.logger.shouldContainFailingIntent
+import com.adidas.mvi.reducer.logger.shouldContainFailingTransform
+import com.adidas.mvi.reducer.logger.shouldContainSuccessfulIntent
+import com.adidas.mvi.reducer.logger.shouldContainSuccessfulTransform
 import com.adidas.mvi.transform.StateTransform
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
@@ -28,11 +32,11 @@ internal class ReducerTests : BehaviorSpec({
     listeners(coroutineListener)
 
     fun createReducer(executor: (intent: TestIntent) -> Flow<StateTransform<TestState>> = createIntentExecutorContainer(transform = TestTransform.Transform1)) = Reducer(
-            coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
-            initialState = TestState.InitialState,
-            defaultDispatcher = coroutineListener.testCoroutineDispatcher,
-            logger = logger,
-            intentExecutor = executor
+        coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
+        initialState = TestState.InitialState,
+        defaultDispatcher = coroutineListener.testCoroutineDispatcher,
+        logger = logger,
+        intentExecutor = executor
     )
 
     Given("A reducer with a initial state") {
@@ -107,8 +111,12 @@ internal class ReducerTests : BehaviorSpec({
     }
 
     Given("A reducer which produces Transform1 partial state when Transform1Producer intent is sent") {
-        val reducer = createReducer(createIntentExecutorContainer(intent = TestIntent.Transform1Producer,
-                transform = TestTransform.Transform1))
+        val reducer = createReducer(
+            createIntentExecutorContainer(
+                intent = TestIntent.Transform1Producer,
+                transform = TestTransform.Transform1
+            )
+        )
 
         When("I execute Transform1Producer intent") {
             reducer.executeIntent(TestIntent.Transform1Producer)
@@ -125,7 +133,6 @@ internal class ReducerTests : BehaviorSpec({
     Given("A reducer which produces FailedTransform partial state when FailedTransformProducer intent is sent") {
         val transform = TestTransform.FailedTransform
         val reducer = createReducer(createIntentExecutorContainer(transform = transform))
-
 
         When("I execute an FailedTransformProducer intent") {
             reducer.executeIntent(TestIntent.FailedTransformProducer)
@@ -146,8 +153,8 @@ internal class ReducerTests : BehaviorSpec({
         val testFlow = MutableStateFlow(0)
 
         val reducerWrapper = TestCancellationReducerWrapper(
-                someTestFlow = testFlow,
-                coroutineListener = coroutineListener
+            someTestFlow = testFlow,
+            coroutineListener = coroutineListener
         )
 
         When("I execute an intent which kills another intent job") {
@@ -173,23 +180,23 @@ internal class ReducerTests : BehaviorSpec({
 })
 
 private fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<TestState>> =
-        {
-            executedIntents.add(it)
-            flowOf(TestTransform.Transform1)
-        }
+    {
+        executedIntents.add(it)
+        flowOf(TestTransform.Transform1)
+    }
 
 private fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<TestState>> =
-        {
-            if (it is TestIntent.SimpleIntent) throw exception
-            emptyFlow()
-        }
+    {
+        if (it is TestIntent.SimpleIntent) throw exception
+        emptyFlow()
+    }
 
 private fun createIntentExecutorContainer(intent: TestIntent = TestIntent.FailedTransformProducer, transform: TestTransform): (TestIntent) -> Flow<StateTransform<TestState>> =
-        {
-            when (it) {
-                intent -> {
-                    flowOf(transform)
-                }
-                else -> emptyFlow()
+    {
+        when (it) {
+            intent -> {
+                flowOf(transform)
             }
+            else -> emptyFlow()
         }
+    }
