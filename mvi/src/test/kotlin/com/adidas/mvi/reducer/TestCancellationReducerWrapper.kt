@@ -1,27 +1,22 @@
 package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
-import com.adidas.mvi.Logger
 import com.adidas.mvi.Reducer
-import io.mockk.mockk
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import com.adidas.mvi.reducer.logger.SpyLogger
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.TestScope
 
 internal class TestCancellationReducerWrapper(
-    private val someTestFlow: Flow<Int>,
-    coroutineListener: CoroutineListener
+        private val someTestFlow: Flow<Int>,
+        coroutineListener: CoroutineListener
 ) {
 
     private val reducer = Reducer(
-        coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
-        initialState = TestState.InitialState,
-        defaultDispatcher = coroutineListener.testCoroutineDispatcher,
-        logger = mockk<Logger>(relaxUnitFun = true),
-        intentExecutor = this::executeIntent
+            coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
+            initialState = TestState.InitialState,
+            defaultDispatcher = coroutineListener.testCoroutineDispatcher,
+            logger = SpyLogger(),
+            intentExecutor = this::executeIntent
     )
     val state = reducer.state
 
@@ -30,7 +25,7 @@ internal class TestCancellationReducerWrapper(
     }
 
     private fun executeIntent(
-        intent: TestIntent
+            intent: TestIntent
     ): Flow<TestTransform> {
         return when (intent) {
             TestIntent.AbelIntent -> someTestFlow.map { TestTransform.AbelTransform }
