@@ -2,25 +2,20 @@ package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
 import com.adidas.mvi.Reducer
-import com.adidas.mvi.SimplifiedIntentExecutor
 import com.adidas.mvi.TerminatedIntentException
-import com.adidas.mvi.reducer.logger.SpyLogger
-import com.adidas.mvi.reducer.logger.shouldContainFailingIntent
-import com.adidas.mvi.reducer.logger.shouldContainFailingTransform
-import com.adidas.mvi.reducer.logger.shouldContainSuccessfulIntent
-import com.adidas.mvi.reducer.logger.shouldContainSuccessfulTransform
+import com.adidas.mvi.reducer.logger.*
+import com.adidas.mvi.transform.StateTransform
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.inspectors.shouldForAtLeastOne
 import io.kotest.inspectors.shouldForNone
 import io.kotest.inspectors.shouldForOne
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 
@@ -28,22 +23,45 @@ internal class ReducerTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
-    val intentExecutor = mockk<SimplifiedIntentExecutor<TestIntent, TestState>>()
     val logger = SpyLogger()
-
     val coroutineListener = CoroutineListener()
     listeners(coroutineListener)
 
-    fun createReducer() = Reducer(
-        coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
-        initialState = TestState.InitialState,
-        defaultDispatcher = coroutineListener.testCoroutineDispatcher,
-        logger = logger,
-        intentExecutor = intentExecutor
+
+    fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<TestState>> =
+            {
+                executedIntents.add(it)
+                flowOf(TestTransform.Transform1)
+            }
+
+    fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<TestState>> =
+            {
+                if (it is TestIntent.SimpleIntent) throw exception
+                emptyFlow()
+            }
+
+    fun createIntentExecutorContainer(intent: TestIntent = TestIntent.FailedTransformProducer, transform: TestTransform): (TestIntent) -> Flow<StateTransform<TestState>> =
+            {
+                when (it) {
+                    intent -> {
+                        flowOf(transform)
+                    }
+                    else -> emptyFlow()
+                }
+            }
+
+    fun createReducer(executor: (intent: TestIntent) -> Flow<StateTransform<TestState>> = createIntentExecutorContainer(transform = TestTransform.Transform1)) = Reducer(
+            coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
+            initialState = TestState.InitialState,
+            defaultDispatcher = coroutineListener.testCoroutineDispatcher,
+            logger = logger,
+            intentExecutor = executor
     )
 
     Given("A reducer with a initial state") {
-        val reducer = createReducer()
+        val executedIntents = mutableListOf<TestIntent>()
+        val executor: (intent: TestIntent) -> Flow<StateTransform<TestState>> = createIntentExecutorContainer(executedIntents)
+        val reducer = createReducer(executor)
 
         When("I listen to its first value") {
             val firstValue = reducer.state.value
@@ -76,32 +94,29 @@ internal class ReducerTests : BehaviorSpec({
                 logger.history.shouldForOne { log ->
                     log shouldContainSuccessfulIntent TestIntent.SimpleIntent.toString()
                 }
-                verify(exactly = 1) { intentExecutor.invoke(TestIntent.SimpleIntent) }
+                executedIntents shouldContain TestIntent.SimpleIntent
             }
         }
     }
 
     Given("A reducer which triggers a TerminatedIntentException when executing a SimpleIntent") {
         val exceptionToThrow = TerminatedIntentException()
-        every { intentExecutor.invoke(TestIntent.SimpleIntent) } throws exceptionToThrow
-        val reducer = createReducer()
+        val reducer = createReducer(createIntentExecutorContainer(exception = exceptionToThrow))
 
         When("I execute an intent and it is cancelled throwing TerminatedIntentException") {
             reducer.executeIntent(TestIntent.SimpleIntent)
 
             Then("The exception should NOT be logged") {
                 logger.history.shouldForNone { log ->
-                    log shouldContain exceptionToThrow.toString()
+                    log shouldContainSuccessfulIntent exceptionToThrow.toString()
                 }
             }
         }
     }
 
     Given("A reducer which fails to execute a SimpleIntent") {
-        val reducer = createReducer()
-
         val exceptionToThrow = Exception()
-        every { intentExecutor.invoke(TestIntent.SimpleIntent) } throws exceptionToThrow
+        val reducer = createReducer(createIntentExecutorContainer(exception = exceptionToThrow))
 
         When("I execute an intent") {
             reducer.executeIntent(TestIntent.SimpleIntent)
@@ -115,13 +130,8 @@ internal class ReducerTests : BehaviorSpec({
     }
 
     Given("A reducer which produces Transform1 partial state when Transform1Producer intent is sent") {
-        val reducer = createReducer()
-
-        every {
-            intentExecutor.invoke(
-                TestIntent.Transform1Producer,
-            )
-        } returns flowOf(TestTransform.Transform1)
+        val reducer = createReducer(createIntentExecutorContainer(intent = TestIntent.Transform1Producer,
+                transform = TestTransform.Transform1))
 
         When("I execute Transform1Producer intent") {
             reducer.executeIntent(TestIntent.Transform1Producer)
@@ -136,13 +146,9 @@ internal class ReducerTests : BehaviorSpec({
     }
 
     Given("A reducer which produces FailedTransform partial state when FailedTransformProducer intent is sent") {
-        val reducer = createReducer()
+        val transform = TestTransform.FailedTransform
+        val reducer = createReducer(createIntentExecutorContainer(transform = transform))
 
-        every {
-            intentExecutor.invoke(
-                TestIntent.FailedTransformProducer
-            )
-        } returns flowOf(TestTransform.FailedTransform)
 
         When("I execute an FailedTransformProducer intent") {
             reducer.executeIntent(TestIntent.FailedTransformProducer)
@@ -153,7 +159,7 @@ internal class ReducerTests : BehaviorSpec({
 
             Then("The failure should be logged") {
                 logger.history.shouldForOne { log ->
-                    log shouldContainFailingTransform TestTransform.FailedTransform.toString()
+                    log shouldContainFailingTransform transform.toString()
                 }
             }
         }
@@ -163,8 +169,8 @@ internal class ReducerTests : BehaviorSpec({
         val testFlow = MutableStateFlow(0)
 
         val reducerWrapper = TestCancellationReducerWrapper(
-            someTestFlow = testFlow,
-            coroutineListener = coroutineListener
+                someTestFlow = testFlow,
+                coroutineListener = coroutineListener
         )
 
         When("I execute an intent which kills another intent job") {

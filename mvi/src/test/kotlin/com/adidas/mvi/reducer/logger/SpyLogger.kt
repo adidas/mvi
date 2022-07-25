@@ -43,7 +43,7 @@ class SpyLogger : Logger {
                 append(SPACE)
                 append(previousState.toString())
                 append(SPACE)
-                append(newState)
+                append(newState.toString())
             }.toString()
         )
     }
