@@ -7,9 +7,6 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
 
 private sealed class TestState : State {
     object State1 : TestState()
@@ -44,18 +41,14 @@ internal class ReduceRequirementTests : BehaviorSpec({
         }
     }
 
-    given("Two Requirements composed by a DoubleReduceRequirement") {
-        val leftRequirement = mockk<ReduceRequirement<TestState>>()
-        val rightRequirement = mockk<ReduceRequirement<TestState>>()
-        val doubleReduceRequirement = DoubleReduceRequirement(leftRequirement, rightRequirement)
+    given("Successful & Failure ReducerRequirements") {
+        val state = TestState.State2
+        val successfulReduceReq = createReduceRequirement(TestState.State2)
+        val failureReduceReq = createReduceRequirement(Exception())
 
-        beforeContainer {
-            clearAllMocks()
-        }
+        `when`("Composing DoubleReduceRequirement with [Successful,Failure]") {
+            val doubleReduceRequirement = DoubleReduceRequirement(successfulReduceReq, failureReduceReq)
 
-        `when`("The left requirement is successful and the right fails") {
-            every { leftRequirement.reduce(TestState.State1) } returns TestState.State2
-            every { rightRequirement.reduce(TestState.State1) } throws Exception()
             val newState = doubleReduceRequirement.reduce(TestState.State1)
 
             then("The state should be transformed by the left") {
@@ -63,9 +56,9 @@ internal class ReduceRequirementTests : BehaviorSpec({
             }
         }
 
-        `when`("The left requirement fails and the right is successful") {
-            every { leftRequirement.reduce(TestState.State1) } throws Exception()
-            every { rightRequirement.reduce(TestState.State1) } returns TestState.State2
+        `when`("Composing DoubleReduceRequirement with [Failure, Successful]") {
+            val doubleReduceRequirement = DoubleReduceRequirement(failureReduceReq, successfulReduceReq)
+
             val newState = doubleReduceRequirement.reduce(TestState.State1)
 
             then("The state should be transformed by the right") {
@@ -73,9 +66,10 @@ internal class ReduceRequirementTests : BehaviorSpec({
             }
         }
 
-        `when`("Both requirements fail") {
-            every { leftRequirement.reduce(TestState.State1) } throws Exception()
-            every { rightRequirement.reduce(TestState.State1) } throws ClassCastException()
+        `when`("Composing DoubleReduceRequirement with [Failure, Failure]") {
+            val leftReduceReq = createReduceRequirement(Exception())
+            val rightReduceReq = createReduceRequirement(ClassCastException())
+            val doubleReduceRequirement = DoubleReduceRequirement(leftReduceReq, rightReduceReq)
 
             then("The exception should be thrown by the right requirement") {
                 shouldThrow<ClassCastException> {
@@ -83,23 +77,12 @@ internal class ReduceRequirementTests : BehaviorSpec({
                 }
             }
         }
-    }
 
-    given("The or extension and two requirements") {
-        val leftRequirement = mockk<ReduceRequirement<TestState>>()
-        val rightRequirement = mockk<ReduceRequirement<TestState>>()
-
-        beforeContainer {
-            clearAllMocks()
-        }
-
-        `when`("The left requirement is successful and the right fails") {
-            every { leftRequirement.reduce(TestState.State1) } returns TestState.State2
-            every { rightRequirement.reduce(TestState.State1) } throws Exception()
-            val newState = (leftRequirement or rightRequirement).reduce(TestState.State1)
+        `when`("OR operation of [Successful,Failure]") {
+            val newState = (successfulReduceReq or failureReduceReq).reduce(TestState.State1)
 
             then("The state should be transformed by the left") {
-                newState shouldBe TestState.State2
+                newState shouldBe state
             }
         }
     }
@@ -146,3 +129,19 @@ internal class ReduceRequirementTests : BehaviorSpec({
         }
     }
 })
+
+private fun createReduceRequirement(exception: Exception): ReduceRequirement<TestState> {
+    return object : ReduceRequirement<TestState> {
+        override fun reduce(state: TestState): TestState {
+            throw exception
+        }
+    }
+}
+
+private fun createReduceRequirement(returningState: TestState): ReduceRequirement<TestState> {
+    return object : ReduceRequirement<TestState> {
+        override fun reduce(state: TestState): TestState {
+            return returningState
+        }
+    }
+}
