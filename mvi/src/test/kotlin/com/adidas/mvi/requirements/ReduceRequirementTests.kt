@@ -1,6 +1,6 @@
 package com.adidas.mvi.requirements
 
-import com.adidas.mvi.State
+import com.adidas.mvi.LoggableState
 import com.adidas.mvi.StateRequiredNotFulfilledException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
@@ -8,7 +8,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-private sealed class TestState : State {
+private sealed class TestState : LoggableState {
     object State1 : TestState()
     object State2 : TestState()
     object State3 : TestState()

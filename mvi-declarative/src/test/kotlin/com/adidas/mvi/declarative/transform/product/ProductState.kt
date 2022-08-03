@@ -1,8 +1,8 @@
 package com.adidas.mvi.declarative.transform.product
 
-import com.adidas.mvi.State
+import com.adidas.mvi.LoggableState
 
-sealed class ProductState : State {
+sealed class ProductState : LoggableState {
     object Loading : ProductState()
     object Loaded : ProductState()
 }
