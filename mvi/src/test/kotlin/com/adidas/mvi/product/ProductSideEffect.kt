@@ -1,4 +1,4 @@
-package com.adidas.mvi.declarative.transform.product
+package com.adidas.mvi.product
 
 sealed class ProductSideEffect {
     object NavigateToProductDetailsSideEffect : ProductSideEffect()

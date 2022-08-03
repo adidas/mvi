@@ -1,9 +1,8 @@
-package com.adidas.mvi.declarative.transform
+package com.adidas.mvi.reducer
 
 import com.adidas.mvi.Intent
-import com.adidas.mvi.declarative.MviState
-import com.adidas.mvi.declarative.Reducer
-import com.adidas.mvi.declarative.transform.product.ProductState
+import com.adidas.mvi.MviState
+import com.adidas.mvi.product.ProductState
 import com.adidas.mvi.transform.StateTransform
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe

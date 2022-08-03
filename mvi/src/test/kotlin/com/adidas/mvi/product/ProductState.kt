@@ -1,4 +1,4 @@
-package com.adidas.mvi.declarative.transform.product
+package com.adidas.mvi.product
 
 import com.adidas.mvi.LoggableState
 

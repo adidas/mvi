@@ -1,9 +1,9 @@
-package com.adidas.mvi.declarative.transform
+package com.adidas.mvi.transform
 
-import com.adidas.mvi.declarative.MviState
-import com.adidas.mvi.declarative.transform.product.FakeProductSideEffectTransform
-import com.adidas.mvi.declarative.transform.product.ProductSideEffect
-import com.adidas.mvi.declarative.transform.product.ProductState
+import com.adidas.mvi.MviState
+import com.adidas.mvi.product.FakeProductSideEffectTransform
+import com.adidas.mvi.product.ProductSideEffect
+import com.adidas.mvi.product.ProductState
 import com.adidas.mvi.sideeffects.SideEffects
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly

@@ -1,8 +1,9 @@
-package com.adidas.mvi.declarative
+package com.adidas.mvi.reducer
 
 import com.adidas.mvi.Intent
 import com.adidas.mvi.LoggableState
 import com.adidas.mvi.Logger
+import com.adidas.mvi.MviState
 import com.adidas.mvi.Reducer
 import com.adidas.mvi.SimplifiedIntentExecutor
 import com.adidas.mvi.sideeffects.SideEffects
