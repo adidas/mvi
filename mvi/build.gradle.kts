@@ -31,6 +31,5 @@ dependencies {
     implementation(libs.coroutines.core)
 
     testImplementation(libs.kotest.runner)
-    testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
 }

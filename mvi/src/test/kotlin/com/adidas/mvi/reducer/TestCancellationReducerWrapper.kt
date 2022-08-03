@@ -1,9 +1,8 @@
 package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
-import com.adidas.mvi.Logger
 import com.adidas.mvi.Reducer
-import io.mockk.mockk
+import com.adidas.mvi.reducer.logger.SpyLogger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
@@ -20,7 +19,7 @@ internal class TestCancellationReducerWrapper(
         coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
         initialState = TestState.InitialState,
         defaultDispatcher = coroutineListener.testCoroutineDispatcher,
-        logger = mockk<Logger>(relaxUnitFun = true),
+        logger = SpyLogger(),
         intentExecutor = this::executeIntent
     )
     val state = reducer.state
