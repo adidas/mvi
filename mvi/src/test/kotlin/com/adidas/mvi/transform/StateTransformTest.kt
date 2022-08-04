@@ -1,6 +1,6 @@
 package com.adidas.mvi.transform
 
-import com.adidas.mvi.MviState
+import com.adidas.mvi.State
 import com.adidas.mvi.product.FakeProductStateTransform
 import com.adidas.mvi.product.ProductSideEffect
 import com.adidas.mvi.product.ProductState
@@ -14,8 +14,8 @@ class StateTransformTest : ShouldSpec({
         val state = ProductState.Loaded
 
         should("use mutate() function for reducing state") {
-            val mviState = MviState(ProductState.Loading, SideEffects<ProductSideEffect>())
-            FakeProductStateTransform(state).reduce(mviState.state) shouldBe state
+            val state = State(ProductState.Loading, SideEffects<ProductSideEffect>())
+            FakeProductStateTransform(state).reduce(state.view) shouldBe state.view
         }
     }
 })
