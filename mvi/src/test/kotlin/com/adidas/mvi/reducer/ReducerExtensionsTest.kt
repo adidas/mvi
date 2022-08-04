@@ -1,10 +1,9 @@
-package com.adidas.mvi.declarative.transform
+package com.adidas.mvi.reducer
 
 import com.adidas.mvi.Intent
-import com.adidas.mvi.declarative.MviState
-import com.adidas.mvi.declarative.Reducer
-import com.adidas.mvi.declarative.transform.product.ProductState
-import com.adidas.mvi.transform.Transform
+import com.adidas.mvi.State
+import com.adidas.mvi.product.ProductState
+import com.adidas.mvi.transform.StateTransform
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.emptyFlow
@@ -16,12 +15,12 @@ class ReducerExtensionsTest : ShouldSpec({
             coroutineScope = TestScope(),
             initialInnerState = ProductState.Loading,
             intentExecutor = { _: Intent ->
-                emptyFlow<Transform<MviState<ProductState, Unit>>>()
+                emptyFlow<StateTransform<State<ProductState, Unit>>>()
             }
         )
 
         should("The initial inner state should be Loading") {
-            reducer.state.value.state shouldBe ProductState.Loading
+            reducer.state.value.view shouldBe ProductState.Loading
         }
     }
 })

@@ -1,8 +1,8 @@
 package com.adidas.mvi.reducer
 
-import com.adidas.mvi.State
+import com.adidas.mvi.LoggableState
 
-internal sealed class TestState : State {
+internal sealed class TestState : LoggableState {
     object InitialState : TestState()
 
     object StateFromTransform1 : TestState()

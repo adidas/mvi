@@ -1,7 +1,7 @@
-package com.adidas.mvi.declarative.transform.product
+package com.adidas.mvi.product
 
-import com.adidas.mvi.declarative.transform.SideEffectTransform
 import com.adidas.mvi.sideeffects.SideEffects
+import com.adidas.mvi.transform.SideEffectTransform
 
 class FakeProductSideEffectTransform(private val sideEffect: ProductSideEffect) :
     SideEffectTransform<ProductState, ProductSideEffect>() {

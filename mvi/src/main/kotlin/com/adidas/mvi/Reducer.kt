@@ -26,7 +26,7 @@ public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, th
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val intentExecutor: IntentExecutor<TIntent, TState>
 ) where TIntent : Intent,
-        TState : State {
+        TState : LoggableState {
     @Suppress("DEPRECATION")
     public constructor(
         coroutineScope: CoroutineScope,
