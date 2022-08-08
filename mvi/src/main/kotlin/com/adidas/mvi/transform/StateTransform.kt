@@ -4,7 +4,10 @@ import com.adidas.mvi.Loggable
 import kotlinx.coroutines.CoroutineDispatcher
 
 public interface StateTransform<TState> : Loggable {
-    public suspend fun reduce(currentState: TState, defaultDispatcher: CoroutineDispatcher): TState {
+    public suspend fun reduce(
+        currentState: TState,
+        defaultDispatcher: CoroutineDispatcher
+    ): TState {
         return this.reduce(currentState)
     }
 
