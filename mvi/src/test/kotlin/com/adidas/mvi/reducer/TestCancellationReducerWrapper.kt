@@ -2,7 +2,9 @@ package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
 import com.adidas.mvi.Reducer
+import com.adidas.mvi.State
 import com.adidas.mvi.reducer.logger.SpyLogger
+import com.adidas.mvi.sideeffects.SideEffects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
@@ -17,7 +19,7 @@ internal class TestCancellationReducerWrapper(
 
     private val reducer = Reducer(
         coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
-        initialState = TestState.InitialState,
+        initialState = State(TestState.InitialState, SideEffects()),
         defaultDispatcher = coroutineListener.testCoroutineDispatcher,
         logger = SpyLogger(),
         intentExecutor = this::executeIntent
@@ -33,7 +35,12 @@ internal class TestCancellationReducerWrapper(
     ): Flow<TestTransform> {
         return when (intent) {
             TestIntent.AbelIntent -> someTestFlow.map { TestTransform.AbelTransform }
-            TestIntent.CainIntent -> flowOf(TestTransform.CainTransform).onStart { reducer.cleanIntentJobsOfType(TestIntent.AbelIntent::class) }
+            TestIntent.CainIntent -> flowOf(TestTransform.CainTransform).onStart {
+                reducer.cleanIntentJobsOfType(
+                    TestIntent.AbelIntent::class
+                )
+            }
+
             is TestIntent.UniqueTransformIntent -> someTestFlow.map { TestTransform.UniqueTransform(intent.id) }
             else -> emptyFlow()
         }

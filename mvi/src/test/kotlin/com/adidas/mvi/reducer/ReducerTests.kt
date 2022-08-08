@@ -2,12 +2,14 @@ package com.adidas.mvi.reducer
 
 import com.adidas.mvi.CoroutineListener
 import com.adidas.mvi.Reducer
+import com.adidas.mvi.State
 import com.adidas.mvi.TerminatedIntentException
 import com.adidas.mvi.reducer.logger.SpyLogger
 import com.adidas.mvi.reducer.logger.shouldContainFailingIntent
 import com.adidas.mvi.reducer.logger.shouldContainFailingTransform
 import com.adidas.mvi.reducer.logger.shouldContainSuccessfulIntent
 import com.adidas.mvi.reducer.logger.shouldContainSuccessfulTransform
+import com.adidas.mvi.sideeffects.SideEffects
 import com.adidas.mvi.transform.StateTransform
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
@@ -31,9 +33,13 @@ internal class ReducerTests : BehaviorSpec({
     val coroutineListener = CoroutineListener()
     listeners(coroutineListener)
 
-    fun createReducer(executor: (intent: TestIntent) -> Flow<StateTransform<TestState>> = createIntentExecutorContainer(transform = TestTransform.Transform1)) = Reducer(
+    fun createReducer(
+        executor: (intent: TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> = createIntentExecutorContainer(
+            transform = TestTransform.Transform1
+        )
+    ) = Reducer(
         coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
-        initialState = TestState.InitialState,
+        initialState = State(TestState.InitialState, SideEffects()),
         defaultDispatcher = coroutineListener.testCoroutineDispatcher,
         logger = logger,
         intentExecutor = executor
@@ -41,30 +47,31 @@ internal class ReducerTests : BehaviorSpec({
 
     Given("A reducer with a initial state") {
         val executedIntents = mutableListOf<TestIntent>()
-        val executor: (intent: TestIntent) -> Flow<StateTransform<TestState>> = createIntentExecutorContainer(executedIntents)
+        val executor: (intent: TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
+            createIntentExecutorContainer(executedIntents)
         val reducer = createReducer(executor)
 
         When("I listen to its first value") {
             val firstValue = reducer.state.value
 
             Then("It should be the initial state") {
-                firstValue shouldBe TestState.InitialState
+                firstValue.view shouldBe TestState.InitialState
             }
         }
 
         When("I try to require a state different than the current state") {
             Then("It should cause a ClassCastException") {
                 shouldThrow<ClassCastException> {
-                    reducer.requireState<TestState.StateFromTransform1>()
+                    reducer.requireView<TestState.StateFromTransform1>()
                 }
             }
         }
 
         When("I try to require a state equal to the current state") {
-            val requiredState = reducer.requireState<TestState.InitialState>()
+            val requiredView = reducer.requireView<TestState.InitialState>()
 
             Then("It should return the cast state") {
-                requiredState shouldBe TestState.InitialState
+                requiredView shouldBe TestState.InitialState
             }
         }
 
@@ -122,7 +129,7 @@ internal class ReducerTests : BehaviorSpec({
             reducer.executeIntent(TestIntent.Transform1Producer)
 
             Then("The state should change to the state which Transform1 produces") {
-                reducer.state.value shouldBe TestState.StateFromTransform1
+                reducer.state.value.view shouldBe TestState.StateFromTransform1
                 logger.history.shouldForOne { log ->
                     log shouldContainSuccessfulTransform TestState.StateFromTransform1.toString()
                 }
@@ -138,7 +145,7 @@ internal class ReducerTests : BehaviorSpec({
             reducer.executeIntent(TestIntent.FailedTransformProducer)
 
             Then("The current state should remain the same") {
-                reducer.state.value shouldBe TestState.InitialState
+                reducer.state.value.view shouldBe TestState.InitialState
             }
 
             Then("The failure should be logged") {
@@ -163,7 +170,7 @@ internal class ReducerTests : BehaviorSpec({
             testFlow.emit(0)
 
             Then("State must have been correctly changed") {
-                reducerWrapper.state.value.shouldBe(TestState.CainState)
+                reducerWrapper.state.value.view.shouldBe(TestState.CainState)
             }
         }
 
@@ -173,30 +180,34 @@ internal class ReducerTests : BehaviorSpec({
             testFlow.emit(0)
 
             Then("Only the last intent must transform the state") {
-                reducerWrapper.state.value.shouldBe(TestState.UniqueTransformState)
+                reducerWrapper.state.value.view.shouldBe(TestState.UniqueTransformState)
             }
         }
     }
 })
 
-private fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<TestState>> =
+private fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         executedIntents.add(it)
         flowOf(TestTransform.Transform1)
     }
 
-private fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<TestState>> =
+private fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         if (it is TestIntent.SimpleIntent) throw exception
         emptyFlow()
     }
 
-private fun createIntentExecutorContainer(intent: TestIntent = TestIntent.FailedTransformProducer, transform: TestTransform): (TestIntent) -> Flow<StateTransform<TestState>> =
+private fun createIntentExecutorContainer(
+    intent: TestIntent = TestIntent.FailedTransformProducer,
+    transform: TestTransform
+): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         when (it) {
             intent -> {
                 flowOf(transform)
             }
+
             else -> emptyFlow()
         }
     }
