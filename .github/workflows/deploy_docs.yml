@@ -1,11 +1,6 @@
 name: Deploy to GitHub Pages
 
-on:
-  push:
-    branches:
-      - main
-      - enhancement/add-docs
-      - enhancement/add-docs-test
+on: [ workflow_dispatch, push ]
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
 defaults:
@@ -18,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-            ref: enhancement/add-docs-test
       - uses: actions/setup-node@v3
         with:
           node-version: 18
