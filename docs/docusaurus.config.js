@@ -14,14 +14,14 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
 
-  deploymentBranch : "enhancement/add-docs-test", // it should be defined for organization account on github
+  deploymentBranch : "gh-pages", // it should be defined for organization account on github
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'adidas', // Usually your GitHub org/user name.
   projectName: 'mvi', // Usually your repo name.
   trailingSlash: false, // GitHub Pages adds a trailing slash to Docusaurus URLs by default.
-                        //It is recommended to set a trailingSlash config (true or false, not undefined).
+                        // It is recommended to set a trailingSlash config (true or false, not undefined).
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
