@@ -9,7 +9,7 @@ const config = {
   title: 'adidas MVI',
   tagline: 'Minimalistic MVI implementation for Kotlin',
   url: 'https://adidas.github.io',
-  baseUrl: '/',
+  baseUrl: '/mvi',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
