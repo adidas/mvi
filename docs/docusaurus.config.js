@@ -14,6 +14,8 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
 
+  deploymentBranch : "enhancement/add-docs-test" // it should be defined for organization account on github
+
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'adidas', // Usually your GitHub org/user name.
