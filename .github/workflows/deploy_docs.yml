@@ -1,11 +1,12 @@
 name: Deploy to GitHub Pages
 
-on: [ workflow_dispatch, push ]
+on:
+  push:
+    branches:
+      - main
+      - enhancement/add-docs-test
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
-defaults:
-  run:
-    working-directory: ./docs
 
 jobs:
   deploy:
@@ -16,13 +17,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
+          cache: yarn
           cache-dependency-path: docs/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
-      - name: Build website
-        run: npm run build
+      - name: Build mvi-docs
+        working-directory: docs
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
@@ -31,5 +33,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
-          publish_dir: ./build
+          publish_dir: ./docs/build
 #          enable_jekyll: true
