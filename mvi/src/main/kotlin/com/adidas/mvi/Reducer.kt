@@ -5,7 +5,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,9 +16,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 
-public typealias SimplifiedIntentExecutor<TIntent, TState> = (intent: TIntent) -> Flow<StateTransform<TState>>
-
-public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, this option will be deprecated in the future") constructor(
+public class Reducer<TIntent, TState>(
     private val coroutineScope: CoroutineScope,
     initialState: TState,
     private val logger: Logger? = null,
@@ -27,19 +24,8 @@ public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, th
     private val intentExecutor: IntentExecutor<TIntent, TState>
 ) where TIntent : Intent,
         TState : LoggableState {
-    @Suppress("DEPRECATION")
-    public constructor(
-        coroutineScope: CoroutineScope,
-        initialState: TState,
-        intentExecutor: SimplifiedIntentExecutor<TIntent, TState>,
-        logger: Logger? = null,
-        defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
-    ) : this(coroutineScope, initialState, logger, defaultDispatcher, { intent, _ ->
-        intentExecutor(intent)
-    })
 
     private val _transforms = MutableSharedFlow<StateTransform<TState>>()
-    // TODO 2: use another (simpler) data structure once we remove jobTerminator dependency (1) - https://tools.adidas-group.com/jira/browse/HXC-819 [2]
     private val multimap = Multimap<TIntent, Job>()
 
     public val state: StateFlow<TState> = _transforms
@@ -49,17 +35,13 @@ public class Reducer<TIntent, TState> @Deprecated("Use the other constructor, th
     public fun executeIntent(intent: TIntent) {
         logger?.logIntent(intent)
 
-        // TODO 1 : remove this once we replace in all view models - https://tools.adidas-group.com/jira/browse/HXC-819 [1]
-        val snapshotOfJobs = multimap.copy()
-        val intentKiller = JobTerminatorImpl(snapshotOfJobs)
-
         val job = coroutineScope.launch {
             if (intent is UniqueIntent) {
                 cleanIntentJobsOfType(intent::class)
             }
 
             try {
-                _transforms.emitAll(intentExecutor.executeIntent(intent, intentKiller))
+                _transforms.emitAll(intentExecutor.executeIntent(intent))
             } catch (throwable: Throwable) {
                 if (coroutineScope.isActive && throwable !is TerminatedIntentException) {
                     logger?.logFailedIntent(intent, throwable)
