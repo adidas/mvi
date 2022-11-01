@@ -9,7 +9,7 @@ const FeatureList = [
     description: (
       <>
         Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        ahead, and move your docs into the <code>docs</code> directory.
       </>
     ),
   }
