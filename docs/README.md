@@ -1,7 +1,11 @@
+[![adidas official](https://img.shields.io/badge/adidas-official-000000)](https://github.com/adidas)
+[![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi)
+[![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+
 # ADIDAS MVI LIBRARY
 
 ## Introduction
-ADIDAS MVI is an efficient library that helps you implement the MVI architectural pattern in your Android applications. MVI is a pattern that promotes a unidirectional flow of data and provides a clear separation between the different components of your application. This library aims to simplify the implementation of MVI by providing a set of tools and utilities.
+ADIDAS MVI is an efficient library that helps you implement the MVI architectural pattern in your Android or JVM applications. MVI is a pattern that promotes a unidirectional flow of data and provides a clear separation between the different components of your application. This library aims to simplify the implementation of MVI by providing a set of tools and utilities.
 
 ## Features
 Simple and lightweight: The library is designed to be easy to understand and use, without unnecessary complexity or overhead.
