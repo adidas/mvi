@@ -1,3 +1,7 @@
+<div align="center">
+  <img style='width: 500px' src="assets/mvi_logo.png" alt="adidas mvi Logo"/>
+</div>
+
 [![adidas official](https://img.shields.io/badge/adidas-official-000000)](https://github.com/adidas)
 [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi)
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
