@@ -17,6 +17,7 @@
 .idea/**/codeStyleConfig.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/kotlinc.xml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -181,3 +182,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/java,kotlin,intellij,gradle
 
 .DS_Store
+
+local.properties

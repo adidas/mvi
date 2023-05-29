@@ -1,14 +1,24 @@
 [versions]
-kotlin = "1.6.21"
+kotlin = "1.8.21"
 coroutines = "1.6.1"
 kotest = "5.3.0"
 ktlint = "0.45.2"
+kotlin-bom = "1.8.0"
+mvi = "1.5.0"
+activity = "1.7.1"
+lifecycle = "2.6.1"
 
 [libraries]
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom" }
+adidas-mvi = { group = "com.adidas.mvi", name = "mvi", version.ref = "mvi" }
+activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+lifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 
 [plugins]
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "10.3.0" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.21.0" }
+android-library = { id = "com.android.library", version = "8.0.1" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

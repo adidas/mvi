@@ -1,7 +1,8 @@
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 
 plugins {
-    kotlin("jvm") version libs.versions.kotlin.get()
+    kotlin("jvm") version "1.6.21"
     alias(libs.plugins.ktlint)
     alias(libs.plugins.mavenPublish)
 }
@@ -13,10 +14,6 @@ kotlin {
 val compileTestKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
     freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
-}
-
-repositories {
-    mavenCentral()
 }
 
 configure<KtlintExtension> {
