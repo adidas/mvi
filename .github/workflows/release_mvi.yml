@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: New Tag
+name: Release MVI
 
 # Controls when the workflow will run
 on:
@@ -37,10 +37,10 @@ jobs:
       - name: Publish Library
         run: |
           echo "Publishing library🚀"
-          ./gradlew publish --no-daemon --no-parallel
+          ./gradlew :mvi:publish --no-daemon --no-parallel
           echo "Published✅"
           echo "Releasing repository...🚀"
-          ./gradlew closeAndReleaseRepository
+          ./gradlew :mvi:closeAndReleaseRepository
           echo "Released✅"
         env:
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ github.ref_name }}
