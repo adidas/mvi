@@ -17,6 +17,7 @@ activityCompose = { module = "androidx.activity:activity-compose", version.ref =
 lifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 
 [plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "10.3.0" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.25.2" }
 android-library = { id = "com.android.library", version = "8.0.1" }

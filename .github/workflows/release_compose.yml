@@ -40,10 +40,9 @@ jobs:
           ./gradlew :mvi-compose:publish --no-daemon --no-parallel
           echo "Published✅"
           echo "Releasing repository...🚀"
-          ./gradlew :mvi-compose:closeAndReleaseRepository
+          ./gradlew closeAndReleaseRepository
           echo "Released✅"
         env:
-          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
