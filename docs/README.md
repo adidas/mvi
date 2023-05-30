@@ -2,8 +2,9 @@
   <img style='width: 500px' src="assets/mvi_logo.png" alt="adidas mvi Logo"/>
 </div>
 
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.8.20-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+![Test workflow](https://github.com/adidas/mvi/actions/workflows/deploy_docs.yml/badge.svg)
 [![adidas official](https://img.shields.io/badge/adidas-official-000000)](https://github.com/adidas)
-[![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi)
 
 ## Introduction
 
@@ -11,6 +12,15 @@ adidas MVI is an efficient library that helps you implement the MVI architectura
 applications. MVI is a pattern that promotes a unidirectional flow of data and provides a clear separation between the
 different components of your application. This library aims to simplify the implementation of MVI by providing a set of
 tools and utilities.
+
+## Current Version
+
+Here are the current available mvi modules versions:
+
+| Module      |                                                                       Version                                                                        |
+|-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------:|
+| mvi         |         [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi)         |
+| mvi-compose | [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi-compose)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi-compose) |
 
 ## Features
 
@@ -29,7 +39,6 @@ more reliable.
 **Thread safety**: Offers built-in mechanisms to handle concurrency and synchronization when managing the application's
 state. This ensures that multiple threads can safely access and modify the state without encountering data races or
 inconsistencies.
-
 
 ## Usage in adidas
 
@@ -89,4 +98,5 @@ requireAndReduceState() for more convenient.
 responsible for running the intents with a specific coroutine dispatcher, Cancellation and logging of events.
 
 ## License
+
 [Apache License](LICENSE)
