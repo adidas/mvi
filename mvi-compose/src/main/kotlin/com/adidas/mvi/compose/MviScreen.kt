@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * The [MviScreen] is a composable function for implementing the MVI Jetpack Compose, providing a convenient way to observe the state of your ViewModel
  * inside a screen composable.
- * @param state The current state of the [MviViewModel]. This parameter must be of type [StateFlow]<[State]<TViewState, TSideEffect>>, where TViewState is the type
+ * @param state The current state of the ViewModel or similar component. This parameter must be of type [StateFlow]<[State]<TViewState, TSideEffect>>, where TViewState is the type
  * of the view state and TSideEffect is the type of the side effect.
  * @param onSideEffect A lambda function that is called when a side effect is emitted by the MVI architecture. The TSideEffect parameter of the function
  * is the emitted side effect.

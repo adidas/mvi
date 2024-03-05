@@ -65,7 +65,6 @@ public class Reducer<TIntent, TState>(
 
     public inline fun <reified T : TState> requireState(): T = state.value as T
 
-    @Suppress("FunctionName")
     private suspend fun reduce(previousState: TState, transform: StateTransform<TState>): TState {
         return try {
             transform.reduce(previousState, defaultDispatcher).also { newState ->

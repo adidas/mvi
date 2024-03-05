@@ -24,7 +24,7 @@ public class SideEffects<T>() : Iterable<T> {
         return SideEffects()
     }
 
-    override fun iterator(): Iterator<T> = iterator<T> {
+    override fun iterator(): Iterator<T> = iterator {
         do {
             val nextSideEffect: T? = sideEffects.poll()
             nextSideEffect?.let { yield(it) }

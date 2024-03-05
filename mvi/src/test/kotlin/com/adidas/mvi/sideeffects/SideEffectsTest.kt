@@ -83,9 +83,7 @@ internal class SideEffectsTests : BehaviorSpec({
             semaphore.release()
 
             then("It should be released only by the semaphore").config(timeout = 5.toDuration(DurationUnit.SECONDS)) {
-                @Suppress("BlockingMethodInNonBlockingContext")
                 readThread.join()
-                @Suppress("BlockingMethodInNonBlockingContext")
                 addThread.join()
 
                 readThread.isAlive.shouldBeFalse()

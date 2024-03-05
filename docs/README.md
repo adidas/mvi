@@ -2,7 +2,7 @@
   <img style='width: 500px' src="assets/mvi_logo.png" alt="adidas mvi Logo"/>
 </div>
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.8.20-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.22-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
 ![Test workflow](https://github.com/adidas/mvi/actions/workflows/deploy_docs.yml/badge.svg)
 [![adidas official](https://img.shields.io/badge/adidas-official-000000)](https://github.com/adidas)
 
