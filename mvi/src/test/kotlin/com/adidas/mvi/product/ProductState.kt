@@ -3,7 +3,7 @@ package com.adidas.mvi.product
 import com.adidas.mvi.LoggableState
 
 sealed class ProductState : LoggableState {
-    object Loading : ProductState()
+    data object Loading : ProductState()
 
-    object Loaded : ProductState()
+    data object Loaded : ProductState()
 }

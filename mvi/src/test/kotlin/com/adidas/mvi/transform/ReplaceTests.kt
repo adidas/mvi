@@ -9,11 +9,11 @@ import io.kotest.matchers.shouldNotBe
 private data class ReplaceTestNumberContainerObject(val number: Int)
 
 private sealed class ReplaceTestComplexObject {
-    object Child1 : ReplaceTestComplexObject()
+    data object Child1 : ReplaceTestComplexObject()
 
-    object Child2 : ReplaceTestComplexObject()
+    data object Child2 : ReplaceTestComplexObject()
 
-    object Child3 : ReplaceTestComplexObject()
+    data object Child3 : ReplaceTestComplexObject()
 }
 
 internal class ReplaceTests : BehaviorSpec({

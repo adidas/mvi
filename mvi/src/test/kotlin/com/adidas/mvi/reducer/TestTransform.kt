@@ -6,25 +6,25 @@ internal const val IMPOSSIBLE_INTENT_ID = 1
 internal const val UNIQUE_INTENT_ID = 2
 
 internal sealed class TestTransform : ViewTransform<TestState, TestSideEffect>() {
-    object Transform1 : TestTransform() {
+    data object Transform1 : TestTransform() {
         override fun mutate(currentState: TestState): TestState {
             return TestState.StateFromTransform1
         }
     }
 
-    object FailedTransform : TestTransform() {
+    data object FailedTransform : TestTransform() {
         override fun mutate(currentState: TestState): TestState {
             throw Exception()
         }
     }
 
-    object AbelTransform : TestTransform() {
+    data object AbelTransform : TestTransform() {
         override fun mutate(currentState: TestState): TestState {
             return TestState.AbelState
         }
     }
 
-    object CainTransform : TestTransform() {
+    data object CainTransform : TestTransform() {
         override fun mutate(currentState: TestState): TestState {
             return TestState.CainState
         }

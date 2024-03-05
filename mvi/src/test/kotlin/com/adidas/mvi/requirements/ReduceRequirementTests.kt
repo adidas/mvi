@@ -9,11 +9,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 private sealed class TestState : LoggableState {
-    object State1 : TestState()
+    data object State1 : TestState()
 
-    object State2 : TestState()
+    data object State2 : TestState()
 
-    object State3 : TestState()
+    data object State3 : TestState()
 }
 
 internal class ReduceRequirementTests : BehaviorSpec({

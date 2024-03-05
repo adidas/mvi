@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName")
+
 package com.adidas.mvi
 
 import kotlinx.coroutines.CoroutineDispatcher
