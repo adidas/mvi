@@ -17,7 +17,7 @@ public class ViewModelContainerScope<
     testScope: TestScope,
     private val viewModel: T,
 ) : AbstractContainerScope(testScope) {
-    @Suppress("ktlint:standard:function-naming")
+    @Suppress("FunctionName")
     public suspend fun WhenIntent(
         intent: TIntent,
         test: suspend ViewModelWhenContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,
@@ -26,7 +26,7 @@ public class ViewModelContainerScope<
             name =
                 TestName(
                     prefix = "When: ",
-                    name = "${intent::class.simpleName} intent it's called",
+                    name = "${intent::class.simpleName} intent is called",
                     defaultAffixes = true,
                 ),
             disabled = false,
@@ -40,7 +40,7 @@ public class ViewModelContainerScope<
         }
     }
 
-    @Suppress("ktlint:standard:function-naming")
+    @Suppress("FunctionName")
     public suspend fun When(
         name: String,
         test: suspend ViewModelWhenContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,

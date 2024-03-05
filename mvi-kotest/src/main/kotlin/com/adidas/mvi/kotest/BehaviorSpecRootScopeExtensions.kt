@@ -8,7 +8,7 @@ import io.kotest.core.names.TestName
 import io.kotest.core.spec.style.scopes.BehaviorSpecRootScope
 import io.kotest.core.spec.style.scopes.addContainer
 
-@Suppress("ktlint:standard:function-naming")
+@Suppress("FunctionName")
 public inline fun <
     TIntent : Intent,
     TState : LoggableState,

@@ -20,14 +20,14 @@ public class ViewModelWhenContainerScope<
     testScope: TestScope,
     public val viewModel: T,
 ) : AbstractContainerScope(testScope) {
-    @Suppress("ktlint:standard:function-naming")
+    @Suppress("FunctionName")
     public suspend inline fun <reified TActualState : TState> ThenState(
         vararg sideEffects: TSideEffect,
         noinline test: suspend TestScope.(state: State<TActualState, TSideEffect>) -> Unit = {},
     ) {
         var name = "State should be [${TActualState::class.simpleName}]"
         if (sideEffects.isNotEmpty()) {
-            name += " with sideEffects ${sideEffects.map { it::class.java.simpleName }}"
+            name += " with sideEffect(s) ${sideEffects.map { it::class.java.simpleName }}"
         }
 
         registerTest(
@@ -45,13 +45,13 @@ public class ViewModelWhenContainerScope<
         }
     }
 
-    @Suppress("ktlint:standard:function-naming")
+    @Suppress("FunctionName")
     public suspend fun AndIntent(
         intent: TIntent,
         test: suspend ViewModelWhenContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,
     ) {
         registerContainer(
-            TestName("And: ", "${intent::class.simpleName} intent it's called", true),
+            TestName("And: ", "${intent::class.simpleName} intent is executed", true),
             false,
             null,
         ) {
