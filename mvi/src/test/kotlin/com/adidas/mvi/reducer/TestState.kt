@@ -8,8 +8,10 @@ internal sealed class TestState : LoggableState {
     object StateFromTransform1 : TestState()
 
     object AbelState : TestState()
+
     object CainState : TestState()
 
     object ImpossibleState : TestState()
+
     object UniqueTransformState : TestState()
 }

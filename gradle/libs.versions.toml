@@ -2,7 +2,7 @@
 kotlin = "1.9.22"
 coroutines = "1.8.0"
 kotest = "5.8.0"
-ktlint-lib = "0.45.2"
+ktlint-lib = "1.2.1"
 mvi = "1.6.0"
 activity = "1.8.2"
 lifecycle = "2.7.0"

@@ -11,13 +11,14 @@ import kotlinx.coroutines.test.TestScope
 
 class ReducerExtensionsTest : ShouldSpec({
     context("A reducer instantiated with the extension") {
-        val reducer = Reducer(
-            coroutineScope = TestScope(),
-            initialInnerState = ProductState.Loading,
-            intentExecutor = { _: Intent ->
-                emptyFlow<StateTransform<State<ProductState, Unit>>>()
-            }
-        )
+        val reducer =
+            Reducer(
+                coroutineScope = TestScope(),
+                initialInnerState = ProductState.Loading,
+                intentExecutor = { _: Intent ->
+                    emptyFlow<StateTransform<State<ProductState, Unit>>>()
+                },
+            )
 
         should("The initial inner state should be Loading") {
             reducer.state.value.view shouldBe ProductState.Loading

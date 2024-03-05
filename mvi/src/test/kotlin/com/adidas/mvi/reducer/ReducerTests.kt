@@ -34,15 +34,16 @@ internal class ReducerTests : BehaviorSpec({
     listeners(coroutineListener)
 
     fun createReducer(
-        executor: (intent: TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> = createIntentExecutorContainer(
-            transform = TestTransform.Transform1
-        )
+        executor: (intent: TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
+            createIntentExecutorContainer(
+                transform = TestTransform.Transform1,
+            ),
     ) = Reducer(
         coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
         initialState = State(TestState.InitialState, SideEffects()),
         defaultDispatcher = coroutineListener.testCoroutineDispatcher,
         logger = logger,
-        intentExecutor = executor
+        intentExecutor = executor,
     )
 
     Given("A reducer with a initial state") {
@@ -118,12 +119,13 @@ internal class ReducerTests : BehaviorSpec({
     }
 
     Given("A reducer which produces Transform1 partial state when Transform1Producer intent is sent") {
-        val reducer = createReducer(
-            createIntentExecutorContainer(
-                intent = TestIntent.Transform1Producer,
-                transform = TestTransform.Transform1
+        val reducer =
+            createReducer(
+                createIntentExecutorContainer(
+                    intent = TestIntent.Transform1Producer,
+                    transform = TestTransform.Transform1,
+                ),
             )
-        )
 
         When("I execute Transform1Producer intent") {
             reducer.executeIntent(TestIntent.Transform1Producer)
@@ -159,10 +161,11 @@ internal class ReducerTests : BehaviorSpec({
     Given("A class that contains the reducer and it's intent executor has an execution that should run solo") {
         val testFlow = MutableStateFlow(0)
 
-        val reducerWrapper = TestCancellationReducerWrapper(
-            someTestFlow = testFlow,
-            coroutineListener = coroutineListener
-        )
+        val reducerWrapper =
+            TestCancellationReducerWrapper(
+                someTestFlow = testFlow,
+                coroutineListener = coroutineListener,
+            )
 
         When("I execute an intent which kills another intent job") {
             reducerWrapper.execute(TestIntent.AbelIntent)
@@ -186,13 +189,17 @@ internal class ReducerTests : BehaviorSpec({
     }
 })
 
-private fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
+private fun createIntentExecutorContainer(
+    executedIntents: MutableList<TestIntent> = mutableListOf(),
+): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         executedIntents.add(it)
         flowOf(TestTransform.Transform1)
     }
 
-private fun createIntentExecutorContainer(exception: java.lang.Exception): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
+private fun createIntentExecutorContainer(
+    exception: java.lang.Exception,
+): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         if (it is TestIntent.SimpleIntent) throw exception
         emptyFlow()
@@ -200,7 +207,7 @@ private fun createIntentExecutorContainer(exception: java.lang.Exception): (Test
 
 private fun createIntentExecutorContainer(
     intent: TestIntent = TestIntent.FailedTransformProducer,
-    transform: TestTransform
+    transform: TestTransform,
 ): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         when (it) {

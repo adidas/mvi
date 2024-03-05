@@ -11,7 +11,6 @@ internal const val SUCCESSFUL_TRANSFORM = "SuccessfulTransform:"
 internal const val FAILED_TRANSFORM = "FailedTransform:"
 
 class SpyLogger : Logger {
-
     var history = mutableListOf<String>()
 
     override fun logIntent(intent: Loggable) {
@@ -20,22 +19,29 @@ class SpyLogger : Logger {
             StringBuilder().apply {
                 append(SUCCESSFUL_INTENT)
                 append(intent.toString())
-            }.toString()
+            }.toString(),
         )
     }
 
-    override fun logFailedIntent(intent: Loggable, throwable: Throwable) {
+    override fun logFailedIntent(
+        intent: Loggable,
+        throwable: Throwable,
+    ) {
         log(
             StringBuilder().apply {
                 append(FAILED_INTENT)
                 append(intent.toString())
                 append(SPACE)
                 append(throwable)
-            }.toString()
+            }.toString(),
         )
     }
 
-    override fun logTransformedNewState(transform: Loggable, previousState: Loggable, newState: Loggable) {
+    override fun logTransformedNewState(
+        transform: Loggable,
+        previousState: Loggable,
+        newState: Loggable,
+    ) {
         log(
             StringBuilder().apply {
                 append(SUCCESSFUL_TRANSFORM)
@@ -44,11 +50,15 @@ class SpyLogger : Logger {
                 append(previousState.toString())
                 append(SPACE)
                 append(newState.toString())
-            }.toString()
+            }.toString(),
         )
     }
 
-    override fun logFailedTransformNewState(transform: Loggable, state: Loggable, throwable: Throwable) {
+    override fun logFailedTransformNewState(
+        transform: Loggable,
+        state: Loggable,
+        throwable: Throwable,
+    ) {
         log(
             StringBuilder().apply {
                 append(FAILED_TRANSFORM)
@@ -57,7 +67,7 @@ class SpyLogger : Logger {
                 append(state.toString())
                 append(SPACE)
                 append(throwable)
-            }.toString()
+            }.toString(),
         )
     }
 

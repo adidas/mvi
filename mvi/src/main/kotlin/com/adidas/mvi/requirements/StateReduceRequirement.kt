@@ -7,9 +7,8 @@ import kotlin.reflect.cast
 
 public class StateReduceRequirement<TState, TRequiredState>(
     private val expectedState: KClass<out TRequiredState>,
-    private val reduceFunction: (TRequiredState) -> TState
+    private val reduceFunction: (TRequiredState) -> TState,
 ) : ReduceRequirement<TState> where TState : LoggableState, TRequiredState : TState {
-
     public override fun reduce(state: TState): TState {
         if (expectedState.isInstance(state)) {
             return reduceFunction(expectedState.cast(state))

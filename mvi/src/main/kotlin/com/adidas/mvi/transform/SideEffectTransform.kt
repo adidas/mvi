@@ -5,7 +5,6 @@ import com.adidas.mvi.sideeffects.SideEffects
 
 public abstract class SideEffectTransform<TView, TSideEffect> :
     StateTransform<State<TView, TSideEffect>> {
-
     protected abstract fun mutate(sideEffects: SideEffects<TSideEffect>): SideEffects<TSideEffect>
 
     final override fun reduce(currentState: State<TView, TSideEffect>): State<TView, TSideEffect> {

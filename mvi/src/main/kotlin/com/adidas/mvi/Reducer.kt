@@ -21,33 +21,34 @@ public class Reducer<TIntent, TState>(
     initialState: TState,
     private val logger: Logger? = null,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    private val intentExecutor: IntentExecutor<TIntent, TState>
+    private val intentExecutor: IntentExecutor<TIntent, TState>,
 ) where TIntent : Intent,
-        TState : LoggableState {
-
-    private val _transforms = MutableSharedFlow<StateTransform<TState>>()
+          TState : LoggableState {
+    private val transforms = MutableSharedFlow<StateTransform<TState>>()
     private val multimap = Multimap<TIntent, Job>()
 
-    public val state: StateFlow<TState> = _transforms
-        .scan(initialState, this::reduce)
-        .stateIn(coroutineScope, SharingStarted.Eagerly, initialState)
+    public val state: StateFlow<TState> =
+        transforms
+            .scan(initialState, this::reduce)
+            .stateIn(coroutineScope, SharingStarted.Eagerly, initialState)
 
     public fun executeIntent(intent: TIntent) {
         logger?.logIntent(intent)
 
-        val job = coroutineScope.launch {
-            if (intent is UniqueIntent) {
-                cleanIntentJobsOfType(intent::class)
-            }
+        val job =
+            coroutineScope.launch {
+                if (intent is UniqueIntent) {
+                    cleanIntentJobsOfType(intent::class)
+                }
 
-            try {
-                _transforms.emitAll(intentExecutor.executeIntent(intent))
-            } catch (throwable: Throwable) {
-                if (coroutineScope.isActive && throwable !is TerminatedIntentException) {
-                    logger?.logFailedIntent(intent, throwable)
+                try {
+                    transforms.emitAll(intentExecutor.executeIntent(intent))
+                } catch (throwable: Throwable) {
+                    if (coroutineScope.isActive && throwable !is TerminatedIntentException) {
+                        logger?.logFailedIntent(intent, throwable)
+                    }
                 }
             }
-        }
 
         val entry = multimap.put(intent, job)
 
@@ -65,7 +66,10 @@ public class Reducer<TIntent, TState>(
 
     public inline fun <reified T : TState> requireState(): T = state.value as T
 
-    private suspend fun reduce(previousState: TState, transform: StateTransform<TState>): TState {
+    private suspend fun reduce(
+        previousState: TState,
+        transform: StateTransform<TState>,
+    ): TState {
         return try {
             transform.reduce(previousState, defaultDispatcher).also { newState ->
                 logger?.logTransformedNewState(transform, previousState, newState)

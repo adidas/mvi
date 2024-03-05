@@ -16,14 +16,14 @@ public fun <TIntent : Intent, TInnerState : LoggableState, TAction> Reducer(
     initialInnerState: TInnerState,
     intentExecutor: IntentExecutor<TIntent, State<TInnerState, TAction>>,
     logger: Logger? = null,
-    defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
+    defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ): Reducer<TIntent, State<TInnerState, TAction>> {
     return Reducer(
         coroutineScope = coroutineScope,
         initialState = State(initialInnerState, SideEffects()),
         intentExecutor = intentExecutor,
         logger = logger,
-        defaultDispatcher = defaultDispatcher
+        defaultDispatcher = defaultDispatcher,
     )
 }
 

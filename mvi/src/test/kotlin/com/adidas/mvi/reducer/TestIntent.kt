@@ -11,6 +11,7 @@ internal sealed class TestIntent : Intent {
     object FailedTransformProducer : TestIntent()
 
     object AbelIntent : TestIntent()
+
     object CainIntent : TestIntent()
 
     data class UniqueTransformIntent(val id: Int) : TestIntent(), UniqueIntent

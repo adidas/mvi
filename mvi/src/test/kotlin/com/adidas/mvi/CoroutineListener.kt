@@ -9,16 +9,18 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 
 internal class CoroutineListener(
-    internal val testCoroutineDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    internal val testCoroutineDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher(),
 ) : TestListener {
-
     internal val dispatchersContainer: DispatchersContainer = FixedDispatchersContainer(testCoroutineDispatcher)
 
     override suspend fun beforeContainer(testCase: TestCase) {
         Dispatchers.setMain(testCoroutineDispatcher)
     }
 
-    override suspend fun afterContainer(testCase: TestCase, result: TestResult) {
+    override suspend fun afterContainer(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         Dispatchers.resetMain()
         testCoroutineDispatcher.cleanupTestCoroutines()
     }

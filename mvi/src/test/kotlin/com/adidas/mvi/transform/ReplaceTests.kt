@@ -10,7 +10,9 @@ private data class ReplaceTestNumberContainerObject(val number: Int)
 
 private sealed class ReplaceTestComplexObject {
     object Child1 : ReplaceTestComplexObject()
+
     object Child2 : ReplaceTestComplexObject()
+
     object Child3 : ReplaceTestComplexObject()
 }
 
@@ -22,15 +24,16 @@ internal class ReplaceTests : BehaviorSpec({
         val numberContainers = (1..3).map { ReplaceTestNumberContainerObject(it) }
 
         `when`("I try to replace containers which have 1 with 0") {
-            val replaced = numberContainers.replaceIf(equalsOperator(ReplaceTestNumberContainerObject::number, 1)) {
-                it.copy(number = 0)
-            }
+            val replaced =
+                numberContainers.replaceIf(equalsOperator(ReplaceTestNumberContainerObject::number, 1)) {
+                    it.copy(number = 0)
+                }
 
             then("The first item should have a number 0") {
                 replaced.shouldContainInOrder(
                     ReplaceTestNumberContainerObject(0),
                     ReplaceTestNumberContainerObject(2),
-                    ReplaceTestNumberContainerObject(3)
+                    ReplaceTestNumberContainerObject(3),
                 )
             }
 
@@ -44,14 +47,15 @@ internal class ReplaceTests : BehaviorSpec({
         val complexObjects = listOf(ReplaceTestComplexObject.Child1, ReplaceTestComplexObject.Child2)
 
         `when`("I try to replace Child1 with Child3") {
-            val replaced = complexObjects.replaceIfIs { _: ReplaceTestComplexObject.Child1 ->
-                ReplaceTestComplexObject.Child3
-            }
+            val replaced =
+                complexObjects.replaceIfIs { _: ReplaceTestComplexObject.Child1 ->
+                    ReplaceTestComplexObject.Child3
+                }
 
             then("The first item should be Child 3") {
                 replaced.shouldContainInOrder(
                     ReplaceTestComplexObject.Child3,
-                    ReplaceTestComplexObject.Child2
+                    ReplaceTestComplexObject.Child2,
                 )
             }
 
@@ -61,9 +65,10 @@ internal class ReplaceTests : BehaviorSpec({
         }
 
         `when`("I try to replace Child1 with Child3 but using a filter which will fail for all items") {
-            val replaced = complexObjects.replaceIfIs({ false }) { _: ReplaceTestComplexObject.Child1 ->
-                ReplaceTestComplexObject.Child3
-            }
+            val replaced =
+                complexObjects.replaceIfIs({ false }) { _: ReplaceTestComplexObject.Child1 ->
+                    ReplaceTestComplexObject.Child3
+                }
 
             then("No item should be replaced") {
                 replaced shouldBe complexObjects
