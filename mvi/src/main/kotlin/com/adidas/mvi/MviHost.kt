@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
  *
  */
 public interface MviHost<in TIntent : Intent, out TState : LoggableState> {
-
     public val state: Flow<TState>
 
     public fun execute(intent: TIntent)

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 /**
  * The [MviContainer] is a composable function for implementing the MVI in Jetpack Compose, providing a convenient way to observe the state of your ViewModel.
- * The MVIContainer should be used in non-screen composable with a [com.adidas.confirmed.mvi.MviViewModel] attached, such as a ViewPager page that will be
+ * The MVIContainer should be used in non-screen composable with a ViewModel attached, such as a ViewPager page that will be
  * included inside of a parent screen.
  * @param state The current state of the MVI ViewModel. This parameter must be of type [StateFlow]<[State]<TViewState, TSideEffect>>, where TViewState is the type
  * of the view state and TSideEffect is the type of the side effect.

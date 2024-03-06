@@ -9,9 +9,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 private sealed class TestState : LoggableState {
-    object State1 : TestState()
-    object State2 : TestState()
-    object State3 : TestState()
+    data object State1 : TestState()
+
+    data object State2 : TestState()
+
+    data object State3 : TestState()
 }
 
 internal class ReduceRequirementTests : BehaviorSpec({
@@ -20,9 +22,10 @@ internal class ReduceRequirementTests : BehaviorSpec({
 
     given("A state requirement") {
 
-        val stateReduceRequirement = StateReduceRequirement(TestState.State1::class) {
-            TestState.State2
-        }
+        val stateReduceRequirement =
+            StateReduceRequirement(TestState.State1::class) {
+                TestState.State2
+            }
 
         `when`("I try to convert using the required state") {
             val newState = stateReduceRequirement.reduce(TestState.State1)
@@ -88,7 +91,10 @@ internal class ReduceRequirementTests : BehaviorSpec({
     }
 
     given("The or extension and two requirements produced by the requireState extension") {
-        val reduceRequirement = requireState<TestState, TestState.State1> { TestState.State2 } or requireState<TestState, TestState.State2> { TestState.State3 }
+        val reduceRequirement =
+            requireState<TestState, TestState.State1> {
+                TestState.State2
+            } or requireState<TestState, TestState.State2> { TestState.State3 }
 
         `when`("I try to use with a state required by the right requirement") {
             val newState = reduceRequirement.reduce(TestState.State2)
@@ -100,13 +106,16 @@ internal class ReduceRequirementTests : BehaviorSpec({
     }
 
     given("The or extension and three requirements produced by the requireState extension") {
-        val reduceRequirement = requireState<TestState, TestState.State1> {
-            TestState.State3
-        } or requireState<TestState, TestState.State2> {
-            TestState.State1
-        } or requireState<TestState, TestState.State3> {
-            TestState.State2
-        }
+        val reduceRequirement =
+            requireState<TestState, TestState.State1> {
+                TestState.State3
+            } or
+                requireState<TestState, TestState.State2> {
+                    TestState.State1
+                } or
+                requireState<TestState, TestState.State3> {
+                    TestState.State2
+                }
 
         `when`("I try to use with a state required by the last, third requirement") {
             val newState = reduceRequirement.reduce(TestState.State3)
@@ -119,9 +128,10 @@ internal class ReduceRequirementTests : BehaviorSpec({
 
     given("The requireAndReduceState") {
         `when`("I try to use it with a correct state") {
-            val newState = requireAndReduceState(TestState.State1 as TestState) {
-                TestState.State2
-            }
+            val newState =
+                requireAndReduceState(TestState.State1 as TestState) {
+                    TestState.State2
+                }
 
             then("The state should be transformed") {
                 newState shouldBe TestState.State2

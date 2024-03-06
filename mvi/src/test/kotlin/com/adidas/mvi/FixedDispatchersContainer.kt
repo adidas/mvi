@@ -1,9 +1,11 @@
+@file:Suppress("PropertyName")
+
 package com.adidas.mvi
 
 import kotlinx.coroutines.CoroutineDispatcher
 
 internal class FixedDispatchersContainer(
-    coroutineDispatcher: CoroutineDispatcher
+    coroutineDispatcher: CoroutineDispatcher,
 ) : DispatchersContainer {
     override val Default: CoroutineDispatcher = coroutineDispatcher
     override val Main: CoroutineDispatcher = coroutineDispatcher

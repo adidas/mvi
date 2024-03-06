@@ -1,7 +1,5 @@
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
-
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     alias(libs.plugins.ktlint)
@@ -18,7 +16,7 @@ compileTestKotlin.kotlinOptions {
 }
 
 configure<KtlintExtension> {
-    version.set(libs.versions.ktlint.get())
+    version.set(libs.versions.ktlint.lib.get())
 }
 
 tasks.getByName<Test>("test") {

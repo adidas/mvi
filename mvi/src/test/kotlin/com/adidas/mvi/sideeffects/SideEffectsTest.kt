@@ -11,10 +11,8 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
-private class TestSideEffect
-
 @ExperimentalTime
-internal class SideEffectsTests : BehaviorSpec({
+internal class SideEffectsTest : BehaviorSpec({
     given("An empty SideEffects") {
         val sideEffects = SideEffects<TestSideEffect>()
 
@@ -70,22 +68,27 @@ internal class SideEffectsTests : BehaviorSpec({
 
             val semaphore = Semaphore(0)
 
-            val readThread = thread {
-                returnedSideEffects.forEach { _ ->
-                    semaphore.acquire()
+            val readThread =
+                thread {
+                    returnedSideEffects.forEach { _ ->
+                        semaphore.acquire()
+                    }
                 }
-            }
 
-            val addThread = thread {
-                returnedSideEffects = returnedSideEffects.add(secondSideEffectToBeAddedLater)
-            }
+            val addThread =
+                thread {
+                    returnedSideEffects = returnedSideEffects.add(secondSideEffectToBeAddedLater)
+                }
 
             semaphore.release()
 
-            then("It should be released only by the semaphore").config(timeout = 5.toDuration(DurationUnit.SECONDS)) {
-                @Suppress("BlockingMethodInNonBlockingContext")
+            then("It should be released only by the semaphore").config(
+                timeout =
+                    5.toDuration(
+                        DurationUnit.SECONDS,
+                    ),
+            ) {
                 readThread.join()
-                @Suppress("BlockingMethodInNonBlockingContext")
                 addThread.join()
 
                 readThread.isAlive.shouldBeFalse()

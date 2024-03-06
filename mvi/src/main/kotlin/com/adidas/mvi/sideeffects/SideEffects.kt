@@ -9,7 +9,6 @@ import java.util.Queue
  * It locks itself, so you can't add and read at the same time, also it's not possible to read it at the same time from different threads, being completely thread-safe.
  */
 public class SideEffects<T>() : Iterable<T> {
-
     private val sideEffects: Queue<T> = LinkedList()
 
     private constructor(sideEffects: Iterable<T>) : this() {
@@ -24,10 +23,11 @@ public class SideEffects<T>() : Iterable<T> {
         return SideEffects()
     }
 
-    override fun iterator(): Iterator<T> = iterator<T> {
-        do {
-            val nextSideEffect: T? = sideEffects.poll()
-            nextSideEffect?.let { yield(it) }
-        } while (nextSideEffect != null)
-    }
+    override fun iterator(): Iterator<T> =
+        iterator {
+            do {
+                val nextSideEffect: T? = sideEffects.poll()
+                nextSideEffect?.let { yield(it) }
+            } while (nextSideEffect != null)
+        }
 }

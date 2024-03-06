@@ -14,32 +14,31 @@ import kotlinx.coroutines.test.TestScope
 
 internal class TestCancellationReducerWrapper(
     private val someTestFlow: Flow<Int>,
-    coroutineListener: CoroutineListener
+    coroutineListener: CoroutineListener,
 ) {
-
-    private val reducer = Reducer(
-        coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
-        initialState = State(TestState.InitialState, SideEffects()),
-        defaultDispatcher = coroutineListener.testCoroutineDispatcher,
-        logger = SpyLogger(),
-        intentExecutor = this::executeIntent
-    )
+    private val reducer =
+        Reducer(
+            coroutineScope = TestScope(coroutineListener.testCoroutineDispatcher),
+            initialState = State(TestState.InitialState, SideEffects()),
+            defaultDispatcher = coroutineListener.testCoroutineDispatcher,
+            logger = SpyLogger(),
+            intentExecutor = this::executeIntent,
+        )
     val state = reducer.state
 
     fun execute(intent: TestIntent) {
         reducer.executeIntent(intent)
     }
 
-    private fun executeIntent(
-        intent: TestIntent
-    ): Flow<TestTransform> {
+    private fun executeIntent(intent: TestIntent): Flow<TestTransform> {
         return when (intent) {
             TestIntent.AbelIntent -> someTestFlow.map { TestTransform.AbelTransform }
-            TestIntent.CainIntent -> flowOf(TestTransform.CainTransform).onStart {
-                reducer.cleanIntentJobsOfType(
-                    TestIntent.AbelIntent::class
-                )
-            }
+            TestIntent.CainIntent ->
+                flowOf(TestTransform.CainTransform).onStart {
+                    reducer.cleanIntentJobsOfType(
+                        TestIntent.AbelIntent::class,
+                    )
+                }
 
             is TestIntent.UniqueTransformIntent -> someTestFlow.map { TestTransform.UniqueTransform(intent.id) }
             else -> emptyFlow()

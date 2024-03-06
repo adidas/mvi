@@ -4,13 +4,13 @@ import com.adidas.mvi.LoggableState
 
 public inline fun <TState : LoggableState, reified TRequiredState : TState> requireAndReduceState(
     state: TState,
-    noinline reduce: (TRequiredState) -> TState
+    noinline reduce: (TRequiredState) -> TState,
 ): TState {
     return StateReduceRequirement(TRequiredState::class, reduce).reduce(state)
 }
 
 public inline fun <TState : LoggableState, reified TRequiredState : TState> requireState(
-    noinline reduce: (TRequiredState) -> TState
+    noinline reduce: (TRequiredState) -> TState,
 ): ReduceRequirement<TState> {
     return StateReduceRequirement(TRequiredState::class, reduce)
 }
