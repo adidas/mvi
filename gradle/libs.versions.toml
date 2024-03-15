@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.9.22"
 coroutines = "1.8.0"
-kotest = "5.8.0"
+kotest = "5.8.1"
 ktlint-lib = "1.2.1"
 mvi = "1.7.0"
 activity = "1.8.2"
