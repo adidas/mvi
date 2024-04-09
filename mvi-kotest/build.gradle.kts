@@ -15,6 +15,6 @@ configure<KtlintExtension> {
 }
 
 dependencies {
-    implementation(libs.kotest.runner)
-    implementation(libs.adidas.mvi)
+    implementation(libs.kotestRunner)
+    implementation(libs.mvi)
 }

@@ -117,6 +117,10 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
 
+# deploymentTargetDropDown
+.idea/deploymentTargetDropDown.xml
+.idea/assetWizardSettings.xml
+
 ### Java ###
 # Compiled class file
 *.class

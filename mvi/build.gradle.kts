@@ -24,8 +24,8 @@ tasks.getByName<Test>("test") {
 }
 
 dependencies {
-    implementation(libs.coroutines.core)
+    implementation(libs.coroutinesCore)
 
-    testImplementation(libs.kotest.runner)
-    testImplementation(libs.coroutines.test)
+    testImplementation(libs.kotestRunner)
+    testImplementation(libs.coroutinesTest)
 }
