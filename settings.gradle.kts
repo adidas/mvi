@@ -17,3 +17,4 @@ rootProject.name = "mvi"
 include(":mvi")
 include(":mvi-compose")
 include(":mvi-kotest")
+include(":mvi-sample")
