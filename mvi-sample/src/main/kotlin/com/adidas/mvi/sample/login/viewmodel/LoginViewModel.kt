@@ -8,6 +8,7 @@ import com.adidas.mvi.State
 import com.adidas.mvi.reducer.Reducer
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
 internal class LoginViewModel(
@@ -48,7 +49,7 @@ internal class LoginViewModel(
     private fun executeLogin(intent: LoginIntent.Login) = flow {
         emit(LoginTransform.SetIsLoggingIn(isLoggingIn = true))
 
-        kotlinx.coroutines.delay(300)
+        delay(300)
 
         emit(LoginTransform.SetIsLoggingIn(isLoggingIn = false))
 
