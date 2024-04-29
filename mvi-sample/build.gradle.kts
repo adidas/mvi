@@ -50,6 +50,12 @@ android {
             applyKSP(this@configure, applicationVariants)
         }
     }
+
+    android.testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 private fun <T : BaseVariant> applyKSP(
@@ -83,4 +89,8 @@ dependencies {
     implementation(libs.koinAnnotations)
     implementation(libs.koinCompose)
     ksp(libs.koinKspCompiler)
+
+    testImplementation(libs.kotestRunner)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mviKotest)
 }

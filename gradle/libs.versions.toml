@@ -17,7 +17,8 @@ ktlint-gradle = "12.1.0"
 android-library = "8.3.1"
 maven-publish = "0.25.2"
 ui = "1.6.5"
-
+mockk = "1.13.10"
+mvi-kotest = "0.0.2"
 # its beeing used outside this file
 ktlint-lib = "1.2.1"
 
@@ -26,9 +27,10 @@ appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat"
 coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotestRunner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotlinBom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
-mvi = { group = "com.adidas.mvi", name = "mvi", version.ref = "mvi" }
-mviCompose = { group = "com.adidas.mvi", name = "mvi-compose", version.ref = "mvi-compose" }
+kotlinBom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
+mvi = { module = "com.adidas.mvi:mvi", version.ref = "mvi" }
+mviCompose = { module = "com.adidas.mvi:mvi-compose", version.ref = "mvi-compose" }
+mviKotest = { module = "com.adidas.mvi:mvi-kotest", version.ref = "mvi-kotest" }
 activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 lifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 material = { module = "androidx.compose.material:material", version.ref = "material" }
@@ -38,6 +40,7 @@ koinAndroid = { module = "io.insert-koin:koin-android", version.ref = "koin-andr
 koinAnnotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koinKspCompiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 koinCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
