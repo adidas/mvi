@@ -31,6 +31,6 @@ public fun <TIntent : Intent, TInnerState : LoggableState, TAction> Reducer(
 public inline fun <reified TView : Any> Reducer<*, *>.requireView(): TView =
     (state.value as State<TView, *>).view.apply {
         if (!TView::class.isInstance(this)) {
-            throw ClassCastException("Required view of ${TView::class} type, but found ${this}")
+            throw ClassCastException("Required view of ${TView::class} type, but found $this")
         }
     }

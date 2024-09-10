@@ -28,8 +28,7 @@ internal class Multimap<TKey : Any, TValue> {
         innerMap[key] = MutableList(values.size) { values[it] }
     }
 
-    operator fun get(key: TKey): List<MultimapEntry<TKey, TValue>> =
-        innerMap[key]?.toList() ?: listOf()
+    operator fun get(key: TKey): List<MultimapEntry<TKey, TValue>> = innerMap[key]?.toList() ?: listOf()
 
     operator fun <T : TKey> get(keyClass: KClass<T>): List<MultimapEntry<TKey, TValue>> =
         keys

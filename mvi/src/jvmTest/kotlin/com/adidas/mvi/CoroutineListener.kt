@@ -12,11 +12,11 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 
 internal class CoroutineListener(
-    internal val testCoroutineDispatcher: TestDispatcher = UnconfinedTestDispatcher(
-        TestCoroutineScheduler()
-    ),
+    internal val testCoroutineDispatcher: TestDispatcher =
+        UnconfinedTestDispatcher(
+            TestCoroutineScheduler(),
+        ),
 ) : TestListener {
-
     internal val dispatchersContainer: DispatchersContainer =
         FixedDispatchersContainer(testCoroutineDispatcher)
 
@@ -24,7 +24,10 @@ internal class CoroutineListener(
         Dispatchers.setMain(testCoroutineDispatcher)
     }
 
-    override suspend fun afterContainer(testCase: TestCase, result: TestResult) {
+    override suspend fun afterContainer(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         Dispatchers.resetMain()
         testCoroutineDispatcher.scheduler.cancel()
     }

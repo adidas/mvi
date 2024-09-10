@@ -14,16 +14,20 @@ kotlin {
     jvm {
         withJava()
     }
+
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+
     macosX64()
     macosArm64()
+
     watchosArm32()
     watchosArm64()
     watchosDeviceArm64()
     watchosSimulatorArm64()
     watchosX64()
+
     tvosArm64()
     tvosSimulatorArm64()
     tvosX64()
@@ -33,13 +37,10 @@ kotlin {
             implementation(libs.coroutinesCore)
         }
 
-        commonTest.dependencies {
+        jvmTest.dependencies {
             implementation(libs.kotest.framework.engine)
             implementation(libs.kotest.assertions)
             implementation(libs.coroutinesTest)
-        }
-
-        jvmTest.dependencies {
             implementation(libs.kotestRunner)
         }
     }
