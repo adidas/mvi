@@ -37,11 +37,8 @@ jobs:
       - name: Publish Library
         run: |
           echo "Publishing library🚀"
-          ./gradlew :mvi-compose:publish --no-daemon --no-parallel
+          ./gradlew :mvi-compose:publishAndReleaseToMavenCentral --no-configuration-cache
           echo "Published✅"
-          echo "Releasing repository...🚀"
-          ./gradlew closeAndReleaseRepository
-          echo "Released✅"
         env:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}

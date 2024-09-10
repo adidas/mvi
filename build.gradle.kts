@@ -18,11 +18,10 @@ plugins {
     alias(libs.plugins.mavenPublish)
 }
 
-configure(subprojects) {
-
+allprojects {
     pluginManager.withPlugin("com.vanniktech.maven.publish") {
         mavenPublishing {
-            publishToMavenCentral(SonatypeHost.S01)
+            publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
             signAllPublications()
         }
     }
