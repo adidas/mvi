@@ -1,24 +1,25 @@
 [versions]
-ksp = "1.9.23-1.0.19"
-appcompat = "1.6.1"
-koin = "3.5.3"
+ksp = "2.0.20-1.0.25"
+appcompat = "1.7.0"
+koin = "3.5.6"
 koin-annotations = "1.3.1"
-koin-android = "3.5.3"
-koin-compose = "3.5.3"
-kotlin = "1.9.23"
-coroutines = "1.8.0"
-kotest = "5.8.1"
-material = "1.6.5"
+koin-android = "3.5.6"
+koin-compose = "3.5.6"
+kotlin = "2.0.0"
+coroutines = "1.8.1"
+kotest = "5.9.0"
+material = "1.7.0"
 mvi = "1.7.0"
 mvi-compose = "0.0.3"
-activity = "1.8.2"
-lifecycle = "2.7.0"
+activity = "1.9.2"
+lifecycle = "2.8.5"
 ktlint-gradle = "12.1.0"
-android-library = "8.3.1"
-maven-publish = "0.25.2"
-ui = "1.6.5"
-mockk = "1.13.10"
+android-library = "8.3.2"
+maven-publish = "0.29.0"
+ui = "1.7.0"
+mockk = "1.13.11"
 mvi-kotest = "0.0.2"
+
 # its beeing used outside this file
 ktlint-lib = "1.2.1"
 
@@ -26,7 +27,9 @@ ktlint-lib = "1.2.1"
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotestRunner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotlinBom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 mvi = { module = "com.adidas.mvi:mvi", version.ref = "mvi" }
 mviCompose = { module = "com.adidas.mvi:mvi-compose", version.ref = "mvi-compose" }
@@ -49,3 +52,9 @@ mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publi
 android-library = { id = "com.android.library", version.ref = "android-library" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version = "0.25.0" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+
