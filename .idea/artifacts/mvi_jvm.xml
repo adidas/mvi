@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="mvi-jvm">
+    <output-path>$PROJECT_DIR$/mvi/build/libs</output-path>
+    <root id="archive" name="mvi-jvm.jar">
+      <element id="module-output" name="mvi.mvi.jvmMain" />
+    </root>
+  </artifact>
+</component>
