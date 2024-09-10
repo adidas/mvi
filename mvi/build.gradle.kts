@@ -1,3 +1,6 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinMultiplatform
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
@@ -15,22 +18,26 @@ kotlin {
         withJava()
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    macosX64()
-    macosArm64()
-
-    watchosArm32()
-    watchosArm64()
-    watchosDeviceArm64()
-    watchosSimulatorArm64()
-    watchosX64()
-
-    tvosArm64()
-    tvosSimulatorArm64()
-    tvosX64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+        macosX64(),
+        macosArm64(),
+        watchosArm32(),
+        watchosArm64(),
+        watchosDeviceArm64(),
+        watchosSimulatorArm64(),
+        watchosX64(),
+        tvosArm64(),
+        tvosSimulatorArm64(),
+        tvosX64(),
+    ).forEach {
+        it.binaries.framework {
+            baseName = "mvi"
+            isStatic = true
+        }
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -54,4 +61,8 @@ tasks {
     withType<Test> {
         useJUnitPlatform()
     }
+}
+
+configure<MavenPublishBaseExtension> {
+    configure(KotlinMultiplatform(javadocJar = JavadocJar.Empty()))
 }
