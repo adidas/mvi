@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -38,10 +39,6 @@ android {
 
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
     }
 }
 

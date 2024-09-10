@@ -5,8 +5,9 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainInOrder
-import java.util.concurrent.Semaphore
-import kotlin.concurrent.thread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
@@ -66,33 +67,31 @@ internal class SideEffectsTest : BehaviorSpec({
 
             var returnedSideEffects = sideEffects.add(firstSideEffect)
 
-            val semaphore = Semaphore(0)
+            val semaphore = Semaphore(2)
 
-            val readThread =
-                thread {
-                    returnedSideEffects.forEach { _ ->
-                        semaphore.acquire()
-                    }
+            val readJob = launch(Dispatchers.Default) {
+                returnedSideEffects.forEach { _ ->
+                    semaphore.acquire() // Wait for the signal
                 }
+            }
 
-            val addThread =
-                thread {
-                    returnedSideEffects = returnedSideEffects.add(secondSideEffectToBeAddedLater)
-                }
+            val addJob = launch(Dispatchers.Default) {
+                returnedSideEffects = sideEffects.add(secondSideEffectToBeAddedLater)
+            }
 
             semaphore.release()
 
             then("It should be released only by the semaphore").config(
                 timeout =
-                    5.toDuration(
-                        DurationUnit.SECONDS,
-                    ),
+                5.toDuration(
+                    DurationUnit.SECONDS,
+                ),
             ) {
-                readThread.join()
-                addThread.join()
+                readJob.join()
+                addJob.join()
 
-                readThread.isAlive.shouldBeFalse()
-                addThread.isAlive.shouldBeFalse()
+                readJob.isActive.shouldBeFalse()
+                addJob.isActive.shouldBeFalse()
                 returnedSideEffects.shouldContain(secondSideEffectToBeAddedLater)
             }
         }

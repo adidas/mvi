@@ -198,7 +198,7 @@ private fun createIntentExecutorContainer(
     }
 
 private fun createIntentExecutorContainer(
-    exception: java.lang.Exception,
+    exception: Throwable,
 ): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         if (it is TestIntent.SimpleIntent) throw exception

@@ -1,31 +1,56 @@
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
-    kotlin("jvm") version libs.versions.kotlin.get()
+    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.kotest)
+    alias(libs.plugins.atomicfu)
 }
 
 kotlin {
     explicitApi()
-}
 
-val compileTestKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+    jvm {
+        withJava()
+    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    macosX64()
+    macosArm64()
+    watchosArm32()
+    watchosArm64()
+    watchosDeviceArm64()
+    watchosSimulatorArm64()
+    watchosX64()
+    tvosArm64()
+    tvosSimulatorArm64()
+    tvosX64()
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.coroutinesCore)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.kotest.assertions)
+            implementation(libs.coroutinesTest)
+        }
+
+        jvmTest.dependencies {
+            implementation(libs.kotestRunner)
+        }
+    }
 }
 
 configure<KtlintExtension> {
     version.set(libs.versions.ktlint.lib.get())
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-dependencies {
-    implementation(libs.coroutinesCore)
-
-    testImplementation(libs.kotestRunner)
-    testImplementation(libs.coroutinesTest)
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+    }
 }

@@ -2,7 +2,6 @@ package com.adidas.mvi.reducer.logger
 
 import com.adidas.mvi.Loggable
 import com.adidas.mvi.Logger
-import java.lang.StringBuilder
 
 private const val SPACE = " "
 internal const val SUCCESSFUL_INTENT = "SuccessfulIntent:"

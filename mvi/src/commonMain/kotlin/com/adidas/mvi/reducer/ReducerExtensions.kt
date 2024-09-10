@@ -30,7 +30,7 @@ public fun <TIntent : Intent, TInnerState : LoggableState, TAction> Reducer(
 @Suppress("UNCHECKED_CAST")
 public inline fun <reified TView : Any> Reducer<*, *>.requireView(): TView =
     (state.value as State<TView, *>).view.apply {
-        if (this.javaClass != TView::class.java) {
-            throw ClassCastException("Required view of ${TView::class.java} type, but found ${this.javaClass}")
+        if (!TView::class.isInstance(this)) {
+            throw ClassCastException("Required view of ${TView::class} type, but found ${this}")
         }
     }

@@ -1,13 +1,12 @@
 package com.adidas.mvi
 
-import java.util.Collections
 import kotlin.reflect.KClass
 
 internal class Multimap<TKey : Any, TValue> {
     private val innerMap = hashMapOf<TKey, MutableList<MultimapEntry<TKey, TValue>>>()
 
     val keys: Collection<TKey>
-        get() = Collections.unmodifiableSet(innerMap.keys)
+        get() = innerMap.keys.toSet()
 
     fun put(
         key: TKey,
@@ -29,7 +28,8 @@ internal class Multimap<TKey : Any, TValue> {
         innerMap[key] = MutableList(values.size) { values[it] }
     }
 
-    operator fun get(key: TKey): List<MultimapEntry<TKey, TValue>> = innerMap[key]?.let(Collections::unmodifiableList) ?: listOf()
+    operator fun get(key: TKey): List<MultimapEntry<TKey, TValue>> =
+        innerMap[key]?.toList() ?: listOf()
 
     operator fun <T : TKey> get(keyClass: KClass<T>): List<MultimapEntry<TKey, TValue>> =
         keys
