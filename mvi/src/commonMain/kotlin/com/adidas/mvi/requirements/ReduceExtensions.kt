@@ -9,9 +9,7 @@ public inline fun <TState : LoggableState, reified TRequiredState : TState> requ
     return StateReduceRequirement(TRequiredState::class, reduce).reduce(state)
 }
 
-public inline fun <TState : LoggableState, reified TRequiredState : TState> requireState(
-    noinline reduce: (TRequiredState) -> TState,
-): ReduceRequirement<TState> {
+public inline fun <TState : LoggableState, reified TRequiredState : TState> requireState(noinline reduce: (TRequiredState) -> TState): ReduceRequirement<TState> {
     return StateReduceRequirement(TRequiredState::class, reduce)
 }
 

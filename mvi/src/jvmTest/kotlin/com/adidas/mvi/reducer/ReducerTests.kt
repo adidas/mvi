@@ -189,9 +189,7 @@ internal class ReducerTests : BehaviorSpec({
     }
 })
 
-private fun createIntentExecutorContainer(
-    executedIntents: MutableList<TestIntent> = mutableListOf(),
-): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
+private fun createIntentExecutorContainer(executedIntents: MutableList<TestIntent> = mutableListOf()): (TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =
     {
         executedIntents.add(it)
         flowOf(TestTransform.Transform1)
