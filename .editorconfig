@@ -1,0 +1,15 @@
+root = true
+
+# Disable ktlint on generated source code, see
+# https://github.com/JLLeitschuh/ktlint-gradle/issues/746
+[**/build/generated/**]
+ktlint = disabled
+
+[*.{kt,kts}]
+insert_final_newline = true
+max_line_length = 250
+ij_kotlin_imports_layout = *, ^
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ktlint_compose_preview-public-check = disabled
+ktlint_function_naming_ignore_when_annotated_with = Composable

@@ -1,6 +1,8 @@
 package com.adidas.mvi
 
 import com.adidas.mvi.transform.StateTransform
+import kotlin.coroutines.coroutineContext
+import kotlin.reflect.KClass
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,8 +15,6 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
-import kotlin.reflect.KClass
 
 public class Reducer<TIntent, TState>(
     private val coroutineScope: CoroutineScope,

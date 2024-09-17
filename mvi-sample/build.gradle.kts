@@ -79,7 +79,7 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.mvi)
-    implementation(libs.mviCompose)
+    implementation(project(":mvi-compose"))
 
     implementation(libs.koinCore)
     implementation(libs.koinAndroid)
