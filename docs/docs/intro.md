@@ -1,47 +1,23 @@
 ---
+title: 1. Introduction
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Introduction
 
-Let's discover **Docusaurus in less than 5 minutes**.
+**adidas MVI** is a lightweight library that helps developers implement the **Model-View-Intent (MVI)** architectural pattern in Android and JVM applications.
 
-## Getting Started
+The key advantages of using the MVI pattern include:
 
-Get started by **creating a new site**.
+- **Unidirectional Data Flow:** Clear flow of data within your app.
+- **Immutable Data:** Reduces the likelihood of bugs and makes the codebase more reliable.
+- **Separation of Concerns:** Model, View, and Intent are strictly separated, simplifying maintenance and testing.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+Initially developed for the **adidas CONFIRMED** app, the library has since been open-sourced to simplify MVI implementation across different projects.
 
-### What you'll need
+## Features
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- **Lightweight:** Minimal setup with clear APIs.
+- **Built-in Thread Safety:** Ensures concurrent state management without data races.
+- **Customizable:** Provides utilities and tools that adapt to different app needs.
 
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
