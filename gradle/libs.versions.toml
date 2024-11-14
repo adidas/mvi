@@ -17,7 +17,6 @@ ktlint-gradle = "12.1.0"
 android-library = "8.3.2"
 maven-publish = "0.29.0"
 ui = "1.7.1"
-mockk = "1.13.11"
 mvi-kotest = "0.0.2"
 
 # its beeing used outside this file
@@ -43,7 +42,6 @@ koinAndroid = { module = "io.insert-koin:koin-android", version.ref = "koin-andr
 koinAnnotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koinKspCompiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 koinCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -88,6 +88,5 @@ dependencies {
     ksp(libs.koinKspCompiler)
 
     testImplementation(libs.kotestRunner)
-    testImplementation(libs.mockk)
-    testImplementation(libs.mviKotest)
+    testImplementation(project(":mvi-kotest"))
 }
