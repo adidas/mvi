@@ -43,6 +43,7 @@ public class TestMviLogger : Logger {
         public abstract val intent: Loggable
 
         public data class Success(override val intent: Loggable) : LoggedIntent()
+
         public data class Failure(override val intent: Loggable, val throwable: Throwable) : LoggedIntent()
     }
 
@@ -51,6 +52,7 @@ public class TestMviLogger : Logger {
         public abstract val previousState: Loggable
 
         public data class Success(override val transform: Loggable, override val previousState: Loggable, val newState: Loggable) : LoggedTranformation()
+
         public data class Failure(override val transform: Loggable, override val previousState: Loggable, val throwable: Throwable) : LoggedTranformation()
     }
 }
