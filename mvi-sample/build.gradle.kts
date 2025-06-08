@@ -1,21 +1,16 @@
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.TestedExtension
-import com.android.build.gradle.api.BaseVariant
-
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    kotlin("android")
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
 
         versionCode = 1
         versionName = "1.0"
@@ -42,28 +37,9 @@ android {
         compose = true
     }
 
-    extensions.findByType<AppExtension>()?.let {
-        project.extensions.configure(AppExtension::class.java) {
-            applyKSP(this@configure, applicationVariants)
-        }
-    }
-
     android.testOptions {
         unitTests.all {
             it.useJUnitPlatform()
-        }
-    }
-}
-
-private fun <T : BaseVariant> applyKSP(
-    extension: TestedExtension,
-    variants: DomainObjectSet<T>,
-) {
-    variants.all {
-        extension.sourceSets {
-            getByName(this@all.name) {
-                kotlin.srcDir("build/generated/ksp/$name/kotlin")
-            }
         }
     }
 }

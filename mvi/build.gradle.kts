@@ -14,9 +14,7 @@ plugins {
 kotlin {
     explicitApi()
 
-    jvm {
-        withJava()
-    }
+    jvm()
 
     listOf(
         iosX64(),
