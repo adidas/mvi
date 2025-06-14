@@ -13,9 +13,10 @@ public class IntentDslScope<ViewT : LoggableState, SideEffectT : Any>(
     public val flowCollector: FlowCollector<StateTransform<State<ViewT, SideEffectT>>>,
 ) {
     public suspend fun reduce(block: (ViewT) -> ViewT) {
-        val transform = object : ViewTransform<ViewT, SideEffectT>() {
-            override fun mutate(currentState: ViewT): ViewT = block(currentState)
-        }
+        val transform =
+            object : ViewTransform<ViewT, SideEffectT>() {
+                override fun mutate(currentState: ViewT): ViewT = block(currentState)
+            }
         flowCollector.emit(transform)
     }
 
