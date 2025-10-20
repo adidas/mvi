@@ -1,6 +1,7 @@
 package com.adidas.mvi
 
 import com.adidas.mvi.transform.StateTransform
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,6 +44,8 @@ public class Reducer<TIntent, TState>(
 
                 try {
                     transforms.emitAll(intentExecutor.executeIntent(intent))
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (throwable: Throwable) {
                     if (coroutineScope.isActive && throwable !is TerminatedIntentException) {
                         logger?.logFailedIntent(intent, throwable)
