@@ -21,7 +21,7 @@ plugins {
 allprojects {
     pluginManager.withPlugin("com.vanniktech.maven.publish") {
         mavenPublishing {
-            publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
+            publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.Companion.CENTRAL_PORTAL, automaticRelease = true)
             signAllPublications()
         }
     }
