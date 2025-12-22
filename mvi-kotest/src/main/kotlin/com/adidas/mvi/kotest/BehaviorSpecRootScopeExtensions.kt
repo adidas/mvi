@@ -19,7 +19,14 @@ public inline fun <
     crossinline test: suspend ViewModelContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,
 ): Unit =
     addContainer(
-        TestName("Given: ", "a ${T::class.simpleName}", true),
+        TestName(
+            name = "a ${T::class.simpleName}",
+            focus = true,
+            bang = false,
+            prefix = "Given ",
+            suffix = null,
+            defaultAffixes = true
+        ),
         disabled = false,
         null,
     ) {

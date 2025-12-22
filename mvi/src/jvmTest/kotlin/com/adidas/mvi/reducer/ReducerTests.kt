@@ -31,7 +31,7 @@ internal class ReducerTests : BehaviorSpec({
 
     val logger = SpyLogger()
     val coroutineListener = CoroutineListener()
-    listeners(coroutineListener)
+    extensions(coroutineListener)
 
     fun createReducer(
         executor: (intent: TestIntent) -> Flow<StateTransform<State<TestState, TestSideEffect>>> =

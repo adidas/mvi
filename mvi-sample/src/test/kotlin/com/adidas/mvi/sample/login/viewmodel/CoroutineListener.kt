@@ -2,7 +2,7 @@ package com.adidas.mvi.sample.login.viewmodel
 
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel

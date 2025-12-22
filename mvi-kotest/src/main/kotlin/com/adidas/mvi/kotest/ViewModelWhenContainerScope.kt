@@ -31,7 +31,14 @@ public class ViewModelWhenContainerScope<
         }
 
         registerTest(
-            TestName("Then: ", name, true),
+            TestName(
+                name = name,
+                focus = false,
+                bang = false,
+                prefix = "Then: ",
+                suffix = null,
+                defaultAffixes = true,
+            ),
             false,
             null,
         ) {
@@ -51,7 +58,14 @@ public class ViewModelWhenContainerScope<
         test: suspend ViewModelWhenContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,
     ) {
         registerContainer(
-            TestName("And: ", "${intent::class.simpleName} intent is executed", true),
+            TestName(
+                name = "${intent::class.simpleName} intent is executed",
+                focus = false,
+                bang = false,
+                prefix = "And: ",
+                suffix = null,
+                defaultAffixes = true,
+            ),
             false,
             null,
         ) {

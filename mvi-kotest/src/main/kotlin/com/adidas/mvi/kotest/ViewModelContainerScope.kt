@@ -25,8 +25,11 @@ public class ViewModelContainerScope<
         registerContainer(
             name =
                 TestName(
-                    prefix = "When: ",
                     name = "${intent::class.simpleName} intent is called",
+                    focus = false,
+                    bang = false,
+                    prefix = "When: ",
+                    suffix = null,
                     defaultAffixes = true,
                 ),
             disabled = false,
@@ -46,7 +49,14 @@ public class ViewModelContainerScope<
         test: suspend ViewModelWhenContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,
     ) {
         registerContainer(
-            name = TestName(prefix = "When: ", name = name, defaultAffixes = true),
+            name = TestName(
+                name = name,
+                focus = false,
+                bang = false,
+                prefix = "When: ",
+                suffix = null,
+                defaultAffixes = true,
+            ),
             disabled = false,
             config = null,
         ) {
