@@ -25,7 +25,7 @@ public inline fun <
             bang = false,
             prefix = "Given ",
             suffix = null,
-            defaultAffixes = true
+            defaultAffixes = true,
         ),
         disabled = false,
         null,

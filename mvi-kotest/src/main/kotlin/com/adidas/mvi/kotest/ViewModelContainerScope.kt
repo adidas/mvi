@@ -49,14 +49,15 @@ public class ViewModelContainerScope<
         test: suspend ViewModelWhenContainerScope<TIntent, TState, TSideEffect, T>.() -> Unit,
     ) {
         registerContainer(
-            name = TestName(
-                name = name,
-                focus = false,
-                bang = false,
-                prefix = "When: ",
-                suffix = null,
-                defaultAffixes = true,
-            ),
+            name =
+                TestName(
+                    name = name,
+                    focus = false,
+                    bang = false,
+                    prefix = "When: ",
+                    suffix = null,
+                    defaultAffixes = true,
+                ),
             disabled = false,
             config = null,
         ) {
