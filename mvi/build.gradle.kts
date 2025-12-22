@@ -7,8 +7,9 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.mavenPublish)
-    alias(libs.plugins.kotest)
     alias(libs.plugins.atomicfu)
+    alias(libs.plugins.kotestMultiplatform)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {

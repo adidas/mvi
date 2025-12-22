@@ -2,20 +2,16 @@ package com.adidas.mvi.sample.login.viewmodel
 
 import com.adidas.mvi.kotest.GivenViewModel
 import com.adidas.mvi.kotest.TestMviLogger
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest : BehaviorSpec({
 
-    isolationMode = IsolationMode.InstancePerLeaf
-
     val testCoroutineDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
-    listeners(CoroutineListener(testCoroutineDispatcher))
+    extensions(CoroutineListener(testCoroutineDispatcher))
 
     fun getViewModel(): LoginViewModel {
         return LoginViewModel(
