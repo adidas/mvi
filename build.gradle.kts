@@ -1,5 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 buildscript {
 
     repositories {
@@ -21,7 +19,7 @@ plugins {
 allprojects {
     pluginManager.withPlugin("com.vanniktech.maven.publish") {
         mavenPublishing {
-            publishToMavenCentral(automaticRelease = true)
+            publishToMavenCentral(automaticRelease = true, validateDeployment = true)
             signAllPublications()
         }
     }

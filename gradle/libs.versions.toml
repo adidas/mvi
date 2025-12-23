@@ -14,7 +14,7 @@ activity = "1.10.1"
 androidx-lifecycle = "2.8.4"
 ktlint-gradle = "12.3.0"
 android-library = "8.10.1"
-maven-publish = "0.33.0"
+maven-publish = "0.35.0"
 ui = "1.8.2"
 
 # its beeing used outside this file
