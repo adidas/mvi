@@ -8,6 +8,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -44,9 +46,11 @@ public class Reducer<TIntent, TState>(
 
                 try {
                     transforms.emitAll(intentExecutor.executeIntent(intent))
-                } catch (e: CancellationException) {
-                    throw e
                 } catch (throwable: Throwable) {
+                    // Rethrow cancellation exceptions, but only if cancellation is for this coroutine
+                    // A workaround for the https://github.com/Kotlin/kotlinx.coroutines/issues/3658
+                    if (throwable is CancellationException) currentCoroutineContext().ensureActive()
+
                     if (coroutineScope.isActive && throwable !is TerminatedIntentException) {
                         logger?.logFailedIntent(intent, throwable)
                     }
