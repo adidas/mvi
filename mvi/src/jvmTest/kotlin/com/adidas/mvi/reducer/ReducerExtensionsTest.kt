@@ -15,7 +15,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.yield
 
 class ReducerExtensionsTest : ShouldSpec(
     {
@@ -57,7 +56,6 @@ class ReducerExtensionsTest : ShouldSpec(
             should("The initial await state should not return yet") {
                 awaitJob.isCompleted shouldBe false
             }
-
 
             should("return after emitting Loaded") {
                 reducer.executeIntent(TestIntent.CainIntent)
