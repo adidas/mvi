@@ -22,6 +22,7 @@ Here are the current available mvi modules versions:
 | mvi         |         [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi)         |
 | mvi-compose | [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi-compose)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi-compose) |
 | mvi-kotest  |  [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi-kotest)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi-kotest)  |
+| mvi-test    |    [![Maven Central](https://img.shields.io/maven-central/v/com.adidas.mvi/mvi-test)](https://mvnrepository.com/artifact/com.adidas.mvi/mvi-test)    |
 
 ## Features
 
