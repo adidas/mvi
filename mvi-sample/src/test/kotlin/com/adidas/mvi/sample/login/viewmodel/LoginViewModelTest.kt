@@ -1,7 +1,7 @@
 package com.adidas.mvi.sample.login.viewmodel
 
 import com.adidas.mvi.kotest.GivenViewModel
-import com.adidas.mvi.kotest.TestMviLogger
+import com.adidas.mvi.test.TestMviLogger
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
