@@ -39,6 +39,5 @@ public class SideEffects<T>() : Iterable<T> {
         override fun hasNext(): Boolean {
             return sideEffects.value.isNotEmpty()
         }
-
     }
 }
