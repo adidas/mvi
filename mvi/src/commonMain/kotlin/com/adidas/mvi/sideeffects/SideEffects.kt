@@ -27,13 +27,18 @@ public class SideEffects<T>() : Iterable<T> {
         return SideEffects()
     }
 
-    override fun iterator(): Iterator<T> =
-        iterator {
-            while (true) {
-                val currentList = sideEffects.value
-                if (currentList.isEmpty()) break
-                val nextSideEffect = currentList.removeFirstOrNull()
-                nextSideEffect?.let { yield(it) }
-            }
+    override fun iterator(): Iterator<T> {
+        return SideEffectsIterator()
+    }
+
+    private inner class SideEffectsIterator : Iterator<T> {
+        override fun next(): T {
+            return sideEffects.value.removeFirst()
         }
+
+        override fun hasNext(): Boolean {
+            return sideEffects.value.isNotEmpty()
+        }
+
+    }
 }
