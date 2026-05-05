@@ -56,6 +56,7 @@ dependencies {
 
     implementation(libs.mvi)
     implementation(project(":mvi-compose"))
+    implementation(project(":mvi-test"))
 
     implementation(libs.koinCore)
     implementation(libs.koinAndroid)

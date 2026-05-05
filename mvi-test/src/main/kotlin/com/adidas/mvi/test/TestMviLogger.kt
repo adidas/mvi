@@ -1,4 +1,4 @@
-package com.adidas.mvi.kotest
+package com.adidas.mvi.test
 
 import com.adidas.mvi.Loggable
 import com.adidas.mvi.Logger
@@ -8,14 +8,6 @@ import com.adidas.mvi.Logger
  *
  * You can access list of all logged entries from [loggedTranformations] and [loggedIntents].
  */
-@Deprecated(
-    message = "Use the one from mvi-test package",
-    replaceWith =
-        ReplaceWith(
-            expression = "com.adidas.mvi.test.TestMviLogger",
-            "com.adidas.mvi.test.TestMviLogger",
-        ),
-)
 public class TestMviLogger : Logger {
     public val loggedTranformations: MutableList<LoggedTranformation> = ArrayList<LoggedTranformation>()
     public val loggedIntents: MutableList<LoggedIntent> = ArrayList<LoggedIntent>()
