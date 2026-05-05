@@ -1,5 +1,6 @@
 package com.adidas.mvi.sideeffects
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -33,6 +34,17 @@ internal class SideEffectsTest : BehaviorSpec({
 
             then("The SideEffect should not be returned twice") {
                 returnedSideEffectContainer.shouldBeEmpty()
+            }
+        }
+
+        `when`("I add one SideEffect with empty check") {
+            val addedSideEffect = TestSideEffect()
+            val returnedSideEffectContainer = sideEffects.add(addedSideEffect)
+
+            then("The SideEffect empty check should not crash") {
+                shouldThrow<AssertionError> {
+                    returnedSideEffectContainer.shouldBeEmpty()
+                }
             }
         }
 
